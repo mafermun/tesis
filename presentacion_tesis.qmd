@@ -1,0 +1,1341 @@
+---
+title: "Experimento de exclusión de precipitación: Efectos en la humedad del suelo y la comunidad de plantas del bosque piemontano en Tena-Napo, Ecuador"
+subtitle: "Andean - Amazonian Watershed Experience: Exploring Sustainability of Mountain Ecosystems in Ecuador (AWESOME)"
+date: 2025-03-24
+author:
+  - id: 1 
+    name: "<b>María Fernanda Muñoz Macías (Autora)</b>"
+    corresponding: true
+    roles: Autora
+  - id: 2 
+    name: "Jorge Emilio Celi (Tutor) "
+    roles: Tutor
+  - id: 3
+    name: "Gabriel V. Gaona (Co-tutor)"
+    roles: Co-tutor
+format:
+  revealjs:
+    theme: [default, "css/style.scss"]
+    transition: fade
+    transition-speed: fast
+    footer: '<img src="theme/ikiam-320-132-max.png" alt="Logo Ikiam" height="25" style="padding: 0px 5px;"> <img src="theme/logo-hidrologia.svg" alt="Logo Hidrología" height="25" style="padding: 0px 5px;"><img src="theme/logo_lshm_320x149.png" alt="Logo LSHM" height="25" style="padding: 0px 5px;"><img src="theme/logo-unh.svg" alt="Logo UNH" height="25" style="padding: 0px 5px;">'
+    title-slide-attributes:
+      data-background-image: theme/portada.svg
+      data-footer: false
+    width: 1920
+    height: 1080
+    slide-number: c/t
+    
+
+editor: visual
+bibliography: references.bib
+execute: 
+  cache: false
+# self-contained: true 
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(kableExtra)
+library(zoo)
+library(scales)
+library(ggstatsplot)
+library(ggrepel)
+library(ggpmisc)
+library(readxl)
+library(ggpubr)
+library(patchwork)
+library(gt)
+source("R/99_funciones.R")
+
+theme_set(theme_bw(base_size = 16))
+
+```
+
+# Contexto
+
+Aumento de la temperatura debido a:
+
+::::: columns
+::: {.column width="50%"}
+![Pérdida de bosques](ilustraciones/deforest.png){height="300"}
+
+2010-2015:
+
+-   47296 km^2^ en la Amazonía
+
+-   957 km^2^ en Ecuador
+
+(Marengo et al., 2018)
+:::
+
+::: {.column width="50%"}
+![Disminución de absorción de CO2](ilustraciones/CO2.png){height="300"}
+
+La baja absorción de CO2 de la atmósfera por las plantas:
+
+-   Alterar procesos del ciclo hidrológico
+-   Aumento en la evaporación
+-   Baja disponibilidad de agua en estado líquido
+-   Algunos lugares tendrán más disponibilidad de agua y otros tendrán **menos disponibilidad**
+:::
+:::::
+
+La vegetación actúa como un regulador del agua entre la atmósfera y el suelo
+
+## Sequía meteorológica
+
+::::: columns
+::: {.column width="60%"}
+![[@espinoza2024]](ilustraciones/anomaliapreci.png)
+:::
+
+::: {.column width="40%"}
+Disminución respecto a la media normal
+
+-   Desequilibrio hidrológico
+
+-   Desarrollo gradual
+
+2005 - 2010, afectaron:
+
+-   Cientos de hectáreas de bosque en la Amazonía brasileña
+
+-   32.36% de la superficie continental de Ecuador
+
+    [@sáenz2021]
+:::
+:::::
+
+## ¿Qué respuestas tienen los bosques cuando hay sequías?
+
+:::::: columns
+::: {.column width="33%"}
+Disminuyen su capacidad de resiliencia
+
+-   Nuevo estado del ecosistema (absorción de CO2)
+:::
+
+::: {.column width="33%"}
+Efecto en el crecimiento vegetal (producción primaria)
+
+Reducción de la biomasa del dosel (defoliación, caída de ramas de los árboles)
+
+-   Cambios en la estructura del dosel (densidad, contenido de agua en ramas y hojas)
+:::
+
+::: {.column width="33%"}
+Incremento de la mortalidad de grandes árboles cuando el agua en el suelo disminuye a un umbral crítico
+:::
+::::::
+
+[@saatchi2012; @machado-silva2021; @tao2022]
+
+------------------------------------------------------------------------
+
+![](ilustraciones/estudios.svg)
+
+Estudiar los efectos de la reducción de la precipitación en la Amazonía ecuatoriana puede ayudarnos a comprender la respuesta de los bosques de la amazonía alta, sobretodo en zonas de transición como la de este sitio de estudio.
+
+::: notes
+En el hipotético caso de una disminución de la media de la precipitación de la Amazonía ecuatoriana no sabemos que podría ocurrir con la interacción de la vegetación de los bosques piemontanos y la disponibilidad del agua.
+:::
+
+# Pregunta de investigación e hipótesis
+
+¿Cómo varía la respuesta de humedad del suelo y la vegetación del sotobosque al excluir el ingreso de agua por precipitación durante el periodo 2022-2024?
+
+Hipótesis:
+
+::: incremental
+-   La humedad del suelo disminuirá por la reducción de la precipitación
+:::
+
+::: incremental
+-   El crecimiento longitudinal del tallo, la producción de hojas, la presencia de flores y/o frutos y la supervivencia de la vegetación del sotobosque disminuirá debido a la disminución de la disponibilidad de agua en el suelo.
+:::
+
+# Objetivos
+
+[General]{.Large}
+
+Analizar la respuesta de la humedad del suelo y su efecto en la vegetación del sotobosque a la reducción de precipitación en parcelas experimentales del bosque siempreverde piemontano del norte - centro de la cordillera de los Andes durante el periodo 2022-2024
+
+[Específicos:]{.Large}
+
+-   Analizar las respuestas de humedad del suelo con respecto a la precipitación, en el ecosistema de las parcelas experimentales en el bosque siempreverde piemontano del norte - centro de la cordillera de los Andes durante el periodo 2023-2024.
+
+-   Analizar las respuestas de la vegetación del sotobosque en las parcelas del bosque siempreverde piemontano del norte - centro de la cordillera de los Andes durante el periodo 2022-2024.
+
+# ¿Cómo es el bosque siempreverde piemontano?
+
+# Sitio de estudio
+
+::::: columns
+::: {.column width="60%"}
+![](mapa/tesis_ubicacion.svg)
+:::
+
+::: {.column width="40%"}
+Bosque siempreverde piemontano del norte - centro de la cordillera de los Andes, 400 - 1200 msnm (zona de transición)
+
+Dosel cerrado
+
+Bosque secundario
+
+Experimento, 637 - 644 msnm
+:::
+:::::
+
+------------------------------------------------------------------------
+
+::: centered
+![Resistividad del suelo. Sedney Vera y Sebastian Araujo.](ilustraciones/resistividad.svg)
+:::
+
+Suelo limo-arenoso \| Suelo superficial materia orgánica \| Formación Tiyuyacu \| Mayor resistividad bajo los 60 cm
+
+------------------------------------------------------------------------
+
+```{r}
+#| fig-width: 18
+#| fig-height: 8.4375
+#| fig-dpi: 96
+#| fig-retina: true
+
+load("../Precipitación/data/pcp_ta_data.rda")
+
+climograma <- pcp_ta_data %>% 
+  mutate(tan = if_else(is.infinite(tan), NA, tan),
+         tax = if_else(is.infinite(tax), NA, tax)) %>% 
+  group_by(fecha = floor_date(fecha, "day")) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+           tam = mean(tam, na.rm = T),
+           tan = min(tan, na.rm = T),
+           tax = max(tax, na.rm = T),
+           .groups = "drop") %>% 
+  group_by(fecha = floor_date(fecha, "month")) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+            tam = mean(tam, na.rm = T),
+            tan = min(tan, na.rm = T),
+            tax = max(tax, na.rm = T),
+            .groups = "drop") %>% 
+  group_by(fecha = month(fecha, label = T)) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+            tam = mean(tam, na.rm = T),
+            tan = min(tan, na.rm = T),
+            tax = max(tax, na.rm = T),
+            .groups = "drop")
+
+ggplot(climograma) +
+  aes(x = fecha) +
+  geom_col(aes(y = pcp, fill = "Precipitación", color = "Precipitación")) +
+  geom_ribbon(aes(ymin = tan * 4, ymax = tax * 4, 
+                  group = 2, fill = "Temperatura"), 
+              alpha = 0.3) +
+  geom_line(aes(y = tam * 4, group = 1, color = "Temperatura")) +
+  scale_y_continuous(sec.axis = sec_axis(transform = ~ ./4, 
+                                         name = "Temperatura [°C]")) +
+  scale_fill_manual(name = "Variables", 
+                    values = c("Precipitación" = "lightblue", 
+                               "Temperatura" = "red")) +
+  scale_color_manual(name = "Variables", 
+                     values = c("Precipitación" = "steelblue", 
+                                "Temperatura" = "red")) +
+  labs(y = "Precipitación [mm]") +
+  theme(panel.grid = element_blank(), 
+        axis.title.x = element_blank(), 
+        legend.title = element_blank(),
+        legend.position = "inside",
+        legend.position.inside = c(0.01, 0.99), 
+        legend.justification = c(0, 1))
+```
+
+::: centered
+Precipitación: 4350 mm/año, bimodal \| Temperatura del aire: 22.9 °C
+:::
+
+# ¿Cómo se excluyen las entradas de agua por precipitación?
+
+------------------------------------------------------------------------
+
+:::::: columns
+::: {.column width="70%"}
+![](ilustraciones/diseño1.svg)
+:::
+
+:::: {.column width="30%"}
+::: {.callout-tip title="Recordar"}
+División en subparcelas (36)
+
+Exclusión de borde (20)
+
+Subparcelas al azar
+
+1 pluviómetro
+
+12 sensores de humedad del suelo
+
+Profundidades elegidas de acuerdo a la influencia de la vegetación
+
+Registro horario
+:::
+::::
+::::::
+
+## Disponibilidad de datos de los sensores
+
+```{r}
+#| fig-width: 10
+#| fig-height: 5
+#| fig-retina: true
+
+library(tidyverse)
+load("../Precipitación/data/pcp_ta_data.rda")
+load("../Sensor de humedad/data/sm_data_clean.rda")
+load("../luz/output/tablas/data_full_luz.rda")
+load("../Precipitación/output/tablas/data_clean_pcp_parcelas.rda")
+
+b <- b %>% 
+  group_by(tratamiento, plot, sitio, fecha = floor_date(fecha, "hour")) %>% 
+  summarise(n = sum(!is.na(luz)), 
+            log = mean(luz, na.rm = T) %>% round(1)) %>% 
+  mutate(log = if_else(n > 6, 1, NA_integer_)) %>% 
+  select(-n) %>% 
+  rename(esp = sitio)
+
+data_pcp_f <- select(data_pcp_f, -intensity_mmh) %>% 
+  mutate(log = if_else(!is.na(pcp_f), 1, NA_integer_),
+         tratamiento = "Bosque") %>% 
+  select(-pcp_f)
+
+pcp_ta_data <- select(pcp_ta_data, 1, 2) %>% 
+   mutate(log = if_else(!is.na(pcp), 1, NA_integer_), 
+          tratamiento = "Estación") %>% 
+  select(-pcp)
+
+sm_data_clean <- select(sm_data_clean, -sensor) %>% 
+  rename(fecha = Timestamp, 
+         esp = depth, 
+         tratamiento = treatment) %>% 
+  mutate(log = if_else(!is.na(raw), 1, NA_integer_), 
+         esp = paste0(esp, "cm")) %>% 
+  select(-raw)
+
+list(Prec. = bind_rows(data_pcp_f, 
+                       Pcp = pcp_ta_data),
+     "Humedad del suelo" = sm_data_clean) %>%
+  bind_rows(.id = "variable") %>%
+  right_join(tibble(fecha = seq(min(.$fecha, na.rm = T), max(.$fecha, na.rm = T), by = "hour")),
+             by = "fecha") %>%
+  mutate(tratamiento = recode(tratamiento, C = "Control", Droguht = "Sequía", D = "Sequía"),
+         esp = recode(esp, `T` = "Techo", S = "Suelo")) %>%
+  unite(col = "sensor", tratamiento, plot, esp, sep = " ", na.rm = TRUE) %>%
+  ggplot(aes(fecha, sensor, color = log)) +
+  geom_tile(show.legend = FALSE, height = 0.2, fill = NA) +
+  scale_color_continuous(na.value = "#ffffff00") +
+  facet_grid(variable~., scales = "free_y", space = "free") +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.title.y = element_blank())
+
+```
+
+# Para responder nuestra pregunta de investigación se realizaron las siguientes mediciones:
+
+------------------------------------------------------------------------
+
+![[@joo2013; @moreira2024]](ilustraciones/metprecip1.svg)
+
+------------------------------------------------------------------------
+
+![Calibración de los sensores de humedad del suelo](ilustraciones/meths.svg)
+
+------------------------------------------------------------------------
+
+![Monitoreo de vegetación](ilustraciones/metveg.svg)
+
+# ¿Qué características tiene la precipitación en el sitio de estudio?
+
+```{r}
+#| tbl-width: 6
+#| tbl-height: 4
+
+load("../Precipitación/output/tablas/categorias_evpcp.rda")
+
+# categorias_evpcp %>% 
+#   rename(Sitio = sitio) %>% 
+#   mutate(Variable = recode(Variable, 
+#                            numero_eventos = "Total de eventos",
+#                            Sin_precipitacion = "Total de horas previas sin precipitación",
+#                            Duracion = "Duración (h)",
+#                            Volumen = "Volumen (mm)",
+#                            Intensidad = "Intensidad (mm/h)")) %>% 
+#   knitr::kable(align=c("l", "l", rep('c', 4))) %>% 
+#   add_header_above(c(" " = 2, "Eventos de Precipitación" = 4)) %>%
+#   kableExtra::collapse_rows(columns = 1:2, valign = "top")
+
+dt <- categorias_evpcp %>% 
+  rename(Sitio = sitio) %>% 
+  mutate(Variable = recode(Variable, 
+                           numero_eventos = "Total de eventos",
+                           Sin_precipitacion = "Total de horas previas sin precipitación",
+                           Duracion = "Duración (h)",
+                           Volumen = "Volumen (mm)",
+                           Intensidad = "Intensidad (mm/h)")) 
+
+tab <- gt(dt, rowname_col = "Sitio", groupname_col = "Variable") %>%
+  tab_options(table.width = pct(80)) %>% 
+  opt_table_font(size = 24) %>%
+  opt_stylize(style = 6, color = "blue", add_row_striping = TRUE) %>% 
+  cols_align(align = "center", columns = 3:5)  %>% 
+  cols_align(align = "right", columns = 2) %>% 
+  tab_style(
+     style = list(
+      cell_text(style = "italic", weight = "bold")
+      ),
+    locations = cells_row_groups()
+   )
+
+tab
+
+```
+
+# ¿Qué características tiene la precipitación en el sitio de estudio? {visibility="uncounted"}
+
+```{r}
+tab %>%
+   tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = `Categoría 1`,
+      rows = 7:8
+    )
+   )
+```
+
+# ¿Qué características tiene la precipitación en el sitio de estudio? {visibility="uncounted"}
+
+```{r}
+tab %>%
+   tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = c(`Categoría 1`, `Categoría 4`),
+      rows = 7:8
+    )
+   )
+```
+
+# ¿Qué características tiene la precipitación en el sitio de estudio? {visibility="uncounted"}
+
+```{r}
+tab %>%
+   tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = c(`Categoría 1`, `Categoría 4`),
+      rows = 7:8
+    )
+   ) %>% 
+     tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = `Categoría 2`,
+      rows = 1:2
+    )
+   )
+```
+
+# ¿Qué características tiene la precipitación en el sitio de estudio? {visibility="uncounted"}
+
+```{r}
+tab %>%
+   tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = c(`Categoría 1`, `Categoría 4`),
+      rows = 7:8
+    )
+   ) %>% 
+     tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = `Categoría 2`,
+      rows = 1:2
+    )
+   )  %>% 
+     tab_style(
+     style = list(
+      cell_text(color = "#e94b29", weight = "bold")
+      ),
+    locations = cells_body(
+      columns = `Categoría 3`,
+      rows = 9:10
+    )
+   )
+```
+
+# ¿Qué características tiene la precipitación en el sitio de estudio? {visibility="uncounted"}
+
+```{r}
+tab %>%
+   tab_style(
+     style = list(
+      cell_fill(color = "#ffe6d5"),
+      cell_text(weight = "bold")
+      ),
+    locations = cells_body(
+      columns = c(`Categoría 3`, `Categoría 4`),
+      rows = 3:6
+    )
+   ) 
+```
+
+## ¿Es diferente la precipitación dentro y fuera del bosque?
+
+:::::: columns
+::: {.column width="80%"}
+```{r}
+#| fig-width: 15.6
+#| fig-height: 9.5
+#| fig-dpi: 96
+#| fig-retina: true
+
+load("../Precipitación/output/tablas/eventos_match70.rda")
+
+p_c <- eventos_match %>% 
+  select(duration.x, duration.y, intensity.x, intensity.y, 
+         volume.x, volume.y, no_rain.x, no_rain.y) %>% 
+  pivot_longer(everything(), 
+               names_to = c("Variable", "Sitio"), 
+               names_pattern = "(.*).(.)",
+               values_to = "Valor") %>% 
+  mutate(Sitio = recode(Sitio, "x" = "Estación", "y" = "Bosque"),
+         Variable = recode(Variable,
+                           duration = "Duración (h)",
+                           intensity = "Intensidad (mm/h)",
+                           no_rain = "Horas previas sin precipiación",
+                           volume = "Volumen (mm)")) %>% 
+  grouped_ggbetweenstats(
+    Sitio, `Valor`, pairwise.display = "all",
+    type = "nonparametric",
+    grouping.var = Variable,
+    ggtheme = theme_tesis(base_size = 14),
+    results.subtitle = FALSE,
+    centrality.label.args = list(size = 5, 
+                                 nudge_x = 0.4, 
+                                 segment.linetype = 4,
+                                 min.segment.length = 0),
+    point.args = list(
+      position = ggplot2::position_jitterdodge(dodge.width = 0.6),
+      alpha = 0.4, size = 3, 
+      stroke = 0, na.rm = TRUE), 
+    boxplot.args = list(linewidth = 0.25, alpha = 0.2, na.rm = TRUE), 
+    violin.args = list(linewidth = 0.25, alpha = 0.2, na.rm = TRUE)) &
+  theme(panel.grid = element_blank())
+p_c  +
+  plot_annotation(tag_levels = "a", tag_suffix = ")") &
+  theme(plot.title = element_text(size = 20))
+
+```
+:::
+
+:::: {.column width="20%"}
+::: {.callout-tip title="Recordar"}
+-   No hay diferencias significativas (test de Mann-Whitney), pero los rangos dentro del bosque respecto al:
+
+    -   Volumen \> 300 mm
+    -   Horas previas sin precipitación: 63 días
+:::
+::::
+::::::
+
+## ¿Cuál fué la respuesta de la humedad del suelo a la precipitación?
+
+:::::: columns
+::: {.column width="80%"}
+```{r}
+#| fig-width: 16
+#| fig-height: 10
+#| fig-dpi: 96
+
+load("../Sensor de humedad/data/sm_data_clean.rda")
+load("../Precipitación/output/tablas/pcp_diario_est.rda")
+
+pcp_diario_est =
+  pcp_diario_est %>% 
+  filter(fecha >= "2023-03-01") %>% 
+  mutate(pcp2 = scales::rescale(pcp, c(0.9, 0.7)))
+
+sm_data_clean %>% 
+  ggplot() +
+  aes(Timestamp, raw, color = factor(depth)) +
+  geom_line() +
+  geom_segment(aes(xend = fecha, yend = pcp2, x = fecha, y = 0.9, color = "Precipitación"), data = pcp_diario_est) +
+  scale_y_continuous(sec.axis = 
+                       sec_axis(~rescale(., 
+                                         range(pcp_diario_est$pcp, na.rm = T), 
+                                         c(0.9, 0.7)),
+                                name = "Precipitación (mm/día)", 
+                                breaks = c(0, 50, 100, 150))) +
+  facet_grid(plot~treatment, 
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Droguht"= "Sequía"), 
+               plot = c(A = "Parcela A", B = "Parcela B", C = "Parcela C"))) +
+  labs(y = expression(paste("Contenido volumétrico de agua [cm"^3," cm"^-3,"]")), 
+       color = "Profundidad\n[cm]") +
+  theme_bw(base_size = 16) +
+  theme(legend.title = element_text(hjust = 0.5), 
+        axis.title.x = element_blank())
+```
+:::
+
+:::: {.column width="20%"}
+::: {.callout-tip title="Conjeturas"}
+A los 15 cm de profundidad la disminución de agua tambien es provocada por la toma de agua por las raíces de las plantas
+
+Condiciones antecedentes
+
+-   Eventos de precipitación de categoría 1
+
+¿Por qué la humedad es mayor a los 60 cm?
+
+-   Nivel freático
+-   Flujos preferenciales
+-   Flujos laterales
+
+[@jiang2023]
+:::
+::::
+::::::
+
+## ¿Cómo influyeron los eventos de precipitación a la humedad del suelo en las parcelas de sequía?
+
+:::::: columns
+::: {.column width="70%"}
+```{r}
+#| fig-width: 16
+#| fig-height: 10
+#| fig-dpi: 96
+
+load("output/tablas/picos_sm_rain.rda")
+
+smpicos_pcp %>% 
+  ungroup() %>% 
+  filter(treatment == "Droguht", rsp.total > 0) %>% 
+  ggplot() +
+  aes(cluster, fill = factor(cluster)) +
+  geom_bar(position = "dodge", width = 1) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.2, 
+            size = 5) +
+  scale_y_continuous(limits = c(0,8)) +
+  facet_grid(profundidad ~ plot) +
+  labs(x = "",
+       y = "Nro. de respuestas de los sensores de humedad del suelo de las parcelas sequía",
+       fill = "Categoría de los\neventos de\nprecipitación") +
+  theme_bw(base_size = 18) +
+  theme(axis.title.x = element_blank(), 
+        panel.grid = element_blank())
+
+```
+:::
+
+:::: {.column width="30%"}
+::: {.callout-tip title="Recordar"}
+-   A los 15 cm de profundidad:
+
+    Categoría 4 provocó 9 reacciones
+
+-   A los 60 cm de profundidad:
+
+    Categoría 2 provocó 11 reacciones
+
+-   Categoría 1 no provocó reacciones en los sensores pero puede influir en las condiciones antecedentes de humedad del suelo
+:::
+::::
+::::::
+
+## ¿Qué efectos tuvo la reducción de precipitación sobre la humedad del suelo?
+
+:::::: columns
+:::: {.column width="20%"}
+::: {.callout-tip title="Recordar"}
+Kolmogórov - Smirnov test
+
+Si se encontraron diferencias significativas entre tratamientos
+
+No se encontraron diferencias significativas:
+
+\- Profundidades de parcela control
+
+\- Profundidades de parcela sequía
+:::
+::::
+
+::: {.column width="80%"}
+```{r}
+#| fig-width: 16
+#| fig-height: 8
+#| fig-dpi: 96
+
+load("../Sensor de humedad/data/sm_data_clean.rda")
+
+
+a <- position_dodge(width = 0.8)
+
+
+sm_median <- sm_data_clean %>% 
+  group_by(treatment, plot, depth) %>% 
+  summarise(mediana = median(raw, na.rm = T))
+
+# prueba_wil <- ks.test(raw ~ treatment, data = sm_data_clean %>% 
+#                         filter(depth == 60)) 
+  
+sm_data_clean %>% 
+  ggplot() +
+  aes(plot, raw) +
+  geom_boxplot(aes(fill = factor(depth)), 
+               linewidth = 0.5, 
+               outlier.size = 0.5) +
+  geom_label_repel(data = sm_median,
+             mapping = aes(label = round(mediana, 3),
+                           y = mediana),
+             position = position_dodge(width = 0.8),
+             size = 4,
+             # nudge_x = 0.4,
+             segment.size = unit(0.5, "mm")) +
+  facet_grid(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Droguht"= "Sequía"))) +
+  labs(x = "Parcela",
+       y = expression(paste("Contenido volumétrico de agua [cm"^3," cm"^-3,"]")), 
+       fill = "Profundidad\n[cm]"
+  )+
+  theme_bw(base_size = 16) +
+  theme(legend.title = element_text(hjust = 0.5), 
+        panel.grid = element_blank())
+
+```
+:::
+::::::
+
+## ¿Cómo respondió la vegetación del sotobosque a las variaciones de la humedad?
+
+:::::: columns
+::: {.column width="80%"}
+```{r}
+#| fig-width: 16
+#| fig-height: 9
+#| fig-dpi: 96
+#| fig-retina: true
+
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+load("../AnalisisPlantas/output/tablas/modelolineal_altura.rda")
+load("../AnalisisPlantas/output/tablas/modelolineal_hojas.rda")
+
+mdl_tidy_altura_e <- mdl_tidy_altura %>% 
+  rename(Tratamiento = treatment)
+
+tmp <- mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  group_by(Tratamiento) %>% 
+  mutate(id = 1:n()) %>% 
+  pivot_wider(id_cols = id, 
+              names_from = Tratamiento, 
+              values_from = Slope)
+
+#ks.test(tmp$Control,tmp$Drought)
+
+med <- mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  group_by(Tratamiento) %>% 
+  summarise(Slope = median(Slope))
+
+mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  ggplot() +
+  aes(Slope, color = Tratamiento) +
+  geom_density(linewidth = 1.5) +
+  geom_rug(data = med, linewidth = 4) +
+  annotate(geom = "label",
+           label = 'KS test\nD = 0.48835\np-value = 0.002324',
+            x = 0.4,
+            y = 18,
+            label.padding = unit(0.65, "lines"),
+            alpha = 0.45,
+            size = 5,
+            color = "black") +
+  labs(y = "Densidad", x = "Tasa de crecimiento [cm/día]") +
+  theme_bw(base_size = 16) +
+  theme(panel.grid = element_blank())
+```
+:::
+
+:::: {.column width="20%"}
+::: {.callout-tip title="Recordar"}
+[@tng2022] (Noreste de Australia)
+
+[@janssen2021] (Centro y Sur de la Amazonía)
+
+[@gavinet2019] (Sur de Francia)
+:::
+::::
+::::::
+
+------------------------------------------------------------------------
+
+```{r}
+#| fig-width: 18
+#| fig-height: 7
+#| fig-dpi: 96
+#| fig-retina: true
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+initial_mean <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_head(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Altura = mean(altura, na.rm = T),
+            Desv = sd(altura, na.rm = T),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+final_mean <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Altura = mean(altura, na.rm = T),
+            Desv = sd(altura, na.rm = T),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+ 
+mean <- bind_rows(list(Final = final_mean,
+                       Inicial = initial_mean),
+                  .id = "status") %>% 
+  mutate(lbl = sprintf("%.1f\n(±%.1f)", Altura, Desv))
+
+ddg <- position_dodge(width = 0.25)
+p1 <- ggplot(mean, aes(plot, Altura, color = status)) +
+  geom_errorbar(aes(ymin = Altura - Error.Std, 
+                    ymax = Altura + Error.Std, 
+                    color = status), width = 0.2 , linewidth = 1.5,
+                position = ddg) +
+  geom_point(aes(shape = factor(status)), size = 3, position = ddg) +
+  ggrepel::geom_text_repel(aes(label = lbl), size = 4, point.padding = 0.3) +
+  facet_wrap(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_shape(name = "Monitoreo") +
+  scale_color_discrete(name = "Monitoreo") +
+  labs(x = "Parcela", y = "Altura [cm]", 
+       title = "Longitud del tallo por parcela") +
+  theme_bw(base_size = 16) +
+  theme(panel.grid = element_blank(), 
+        legend.position = "none")
+
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+initial_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Hojas = mean(hojas),
+            Desv = sd(hojas),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+final_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Hojas = mean(hojas),
+            Desv = sd(hojas),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+mean_hoj <- bind_rows(list(Final = final_mean_hoj,
+                       Inicial = initial_mean_hoj),
+                  .id = "status") %>% 
+  mutate(lbl = sprintf("%.1f\n(±%.1f)", Hojas, Desv))
+
+ddg <- position_dodge(width = 0.25)
+p2 <- ggplot(mean_hoj, aes(plot, Hojas, color = status)) +
+  geom_errorbar(aes(ymin = Hojas - Error.Std, 
+                    ymax = Hojas + Error.Std, 
+                    color = status), width = 0.2 , linewidth = 1.5,
+                position = ddg) +
+  geom_point(aes(shape = factor(status)), size = 3, position = ddg) +
+  ggrepel::geom_text_repel(aes(label = lbl), size = 4, point.padding = 0.3) +
+  facet_wrap(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_shape(name = "Monitoreo") +
+  scale_color_discrete(name = "Monitoreo") +
+  labs(x = "Parcela", y = "Número de hojas", title = "Producción de hojas por parcela") +
+  theme_bw(base_size = 16) +
+  theme(panel.grid = element_blank(), 
+        legend.position = "bottom")
+des <- "
+AB
+AB
+AB
+AB
+AB
+AB
+AB
+AB
+AB
+AB
+CC
+"
+
+p1+p2+guide_area()+
+  plot_layout(design = des, guides = "collect")
+
+```
+
+:::::: columns
+:::: {.column width="50%"}
+::: {.callout-tip title="Recordar"}
+-   Crecimiento del tallo: Parcelas sequía 11 cm Parcelas control 28.9 cm
+-   Producción de hojas diferente significativamente. ks -test: D = 0.40952, p-value = 0.04405
+-   Limitación del crecimiento y producción de biomasa
+-   Crecimiento se estabilizó [@valentini2008; @gavinet2019; @tng2022]
+:::
+::::
+
+::: {.column width="50%"}
+```{r}
+#| tbl-width: 6
+#| tbl-height: 4
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+### promedio inicial y final de la atura ----
+
+initial_mean_alt <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>%
+  summarise(avg_alt = mean(altura) %>% round(1),
+            desv_alt = sd(altura) %>% round(1)) 
+
+final_mean_alt <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_alt = mean(altura) %>% round(1),
+            desv_alt = sd(altura) %>% round(1))
+  
+mean_alt <- bind_rows(list(final = final_mean_alt,
+                       initial = initial_mean_alt),
+                  .id = "status")
+
+### promedio inicial y final de numero de hojas ----
+
+initial_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_hoj = mean(hojas) %>% round(1),
+            desv_hoj = sd(hojas) %>% round(1))
+
+final_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_hoj = mean(hojas) %>% round(1),
+            desv_hoj = sd(hojas) %>% round(1))
+
+mean_hoj <- bind_rows(list(final = final_mean_hoj,
+                       initial = initial_mean_hoj),
+                  .id = "status")
+
+### tabla resumen
+
+stats_veg <- mean_alt %>% 
+  merge(mean_hoj) %>% 
+  arrange(desc(status)) %>% 
+  pivot_wider(names_from = status, values_from = starts_with(c("avg_", "desv_"))) %>% 
+  select(treatment, 
+         avg_alt_initial, desv_alt_initial, 
+         avg_alt_final, desv_alt_final,
+         avg_hoj_initial, avg_hoj_final,
+         desv_hoj_initial, desv_hoj_final) %>% 
+  transmute(Parcelas = treatment,
+            "LT.inicial" = paste(avg_alt_initial, "(±", desv_alt_initial,")"),
+            "LT.final" = paste(avg_alt_final, "(±", desv_alt_final,")"),
+            "PH.inicial" = paste(avg_hoj_initial, "(±", desv_hoj_initial,")"),
+            "PH.final" = paste(avg_hoj_final, "(±", desv_hoj_final,")"))
+
+
+gt(stats_veg, rowname_col = "Parcelas") %>% 
+  tab_options(table.width = pct(100)) %>% 
+  opt_table_font(size = 24) %>%
+  opt_stylize(style = 2, color = "green", add_row_striping = TRUE) %>% 
+  cols_align(align = "center", columns = 2:5)  %>% 
+  cols_align(align = "right", columns = 1) %>% 
+  tab_spanner(columns = c(LT.inicial, LT.final), 
+              label = "Longitud del tallo") %>% 
+  tab_spanner(columns = c(PH.inicial, PH.final), 
+              label = "Producción de hojas") %>% 
+  cols_label(LT.inicial = "Inicial", 
+             LT.final = "Final", 
+             PH.inicial = "Inicial", 
+             PH.final = "Final")
+# stats_veg %>% 
+#   knitr::kable(align=c("l", rep('c', 4))) #%>% 
+  #kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  #add_header_above(c(" " = 1, "Momentos en la estructura vegetal" = 4))
+
+```
+:::
+::::::
+
+------------------------------------------------------------------------
+
+:::::: columns
+::: {.column width="50%"}
+```{r}
+#| fig-width: 9
+#| fig-height: 4.5
+#| fig-dpi: 96
+#| fig-retina: true
+
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+ff <- data_clean %>%
+  group_by(treatment, plot, SUBPARCELA, Planta) %>%
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(frutos_flores = sum(`Flores frutos`, na.rm = T),
+            mean_ff = mean(`Flores frutos`, na.rm = T),
+            sd_ff = sd(`Flores frutos`, na.rm = T))
+
+ggplot(ff, aes(treatment, frutos_flores, fill = plot)) +
+  geom_col(position = "dodge", aes(color = plot), width = 0.5) +
+  geom_text(aes(label = frutos_flores, y = frutos_flores + 0.1), 
+            position = position_dodge(width = 0.5), 
+            vjust = -0.1) +
+  labs(y = "Frecuencia de frutos o flores") +
+  theme_bw(base_size = 16) +
+  theme(axis.title.x = element_blank(), 
+        panel.grid = element_blank())
+
+```
+
+```{r}
+#| fig-width: 9
+#| fig-height: 5
+#| fig-dpi: 96
+#| fig-retina: true
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+vs <- data.frame(
+  fechas = as.Date(c("2022-07-26", "2022-09-15", "2022-10-20",
+                     "2022-12-10","2023-01-01","2023-04-06",
+                     "2023-05-10","2023-06-08","2023-07-15",
+                     "2023-09-12","2024-04-05","2024-11-11",
+                     "2024-12-05"), format = "%Y-%m-%d"),
+  Drought_A = c(28, 27, 27, 27, 27, 25, 23, 21, 20, 19, 18, 15, 15)/28,
+  Drought_B = c(26, 21, 13, 13, 8, 7, 6, 4, 4, 4, 3, 3, 3)/26,
+  Drought_C = c(63, 57, 54, 46, 45, 38, 37, 37, 36, 35, 27, 22, 22)/63,
+  Control_A = c(NA, 29, 29, NA, 24, NA, 19, 18, NA, 18, 18, 17, 16)/29,
+  Control_B = c(NA, 40, 36, NA, NA, 31, 27, NA, NA, 23, NA, 16, 15)/40,
+  Control_C = c(NA, 10, 9, NA, 9, 9, NA, NA, NA, NA, NA, 3, 3)/10) %>% 
+  pivot_longer(cols = -fechas, 
+               names_to = c("tratamiento", "parcela"),
+               names_pattern = "(.*)_(.)",
+               values_to = "cantidad") %>% 
+  na.omit() %>% 
+  arrange(tratamiento)
+
+valores <- tibble(x = c(0.95, 0.95),
+       tratamiento = c("Drought", "Control"), 
+       tbl = list(tibble(Parcela = c("A", "B", "C"),
+                         Inicio = c(28, 26, 63), 
+                         Final = c(15, 3, 22)), 
+                  tibble(Parcela = c("A", "B", "C"),
+                         Inicio = c(29, 40, 10), 
+                         Final = c(16, 15, 3)))) 
+  
+z1 <- valores %>% 
+  unnest(tbl) %>% 
+  select(-x) %>% 
+  mutate(Supervivencia = Final/Inicio) %>%
+  group_by(tratamiento) %>%
+  summarise(Inicio = sum(Inicio),
+            Final = sum(Final)) %>%
+  column_to_rownames("tratamiento") %>%
+  as.matrix()
+  
+test_chi <- chisq.test(z1)
+
+
+ggplot(vs, aes(fechas, cantidad)) +
+  geom_line(aes(color = parcela), linewidth = 1.5) +
+  geom_table_npc(data = valores, aes(npcx = x, npcy = x, label = tbl), size = 4)+
+  facet_wrap(~tratamiento,
+             labeller = labeller(
+               tratamiento = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_y_continuous(labels = label_percent()) +
+  labs(x = "Fecha", 
+       y = "Supervivencia") +
+  theme_bw(base_size = 16) +
+  theme(panel.grid = element_blank())
+```
+:::
+
+:::: {.column width="50%"}
+::: {.callout-tip title="Recordar"}
+-   Parcelas control expuestas a pertubaciones naturales
+
+-   Estrés hídrico inhibe la fotosíntesis [@meir2018]
+
+    -   Producción de hojas
+    -   Altera patrones de caída de los frutos
+    -   Proceso de producción de flores/frutos
+
+-   Incremento en la producción de flores (estrategias de las plantas) [@vogado2023]:
+
+    -   Aumento en el tamaño de las raíces
+    -   Dispersión de semillas que pueden cambiar la composición y biodiversidad
+
+Algunas especies se beneficiarían de condiciones menos húmedas (*Poacea, Urticaceae, Piperacea*. Hierbas perennes, anuales, rastreras)
+
+-   Supervivencia, no tuvo diferencias significativas (Chi-cuadrado test):
+
+-   Salud de la vegetación [@tng2022]:
+
+    -   Plantas de las parcelas de sequía suscpetibles a herviboría, enfermedades y "ataques" por insectos chupadores de savia.
+:::
+::::
+::::::
+
+# A partir de esta información podemos responder la pregunta de investigación:
+
+¿Cómo varía la respuesta de humedad del suelo y la vegetación al excluir el ingreso de agua por precipitación durante el periodo 2022-2024?
+
+-   H1: La humedad del suelo disminuirá por la reducción de precipitación
+
+La humedad del suelo si diminuyó significativamente al excluir las entradas de agua por precipitación
+
+-   H2: El crecimiento longitudinal del tallo, la producción de hojas, la presencia de flores y/o frutos y la supervivencia de la vegetación del sotobosque disminuirá debido a la disminución de la disponibilidad de agua en el suelo.
+
+Las tasas de crecimiento fueron significativamente diferentes entre la vegetación de las parcelas control y sequía y por lo tanto la diferencia de crecimiento también es diferente significativamente. Las tasas de producción de hojas también fueron significativamente diferente entre las parcelas control y sequía. La baja disponibilidad de agua para las plantas afectó la producción de flores y/o frutos. La supervivencia de la vegetación no fue significativamente diferente entre las parcelas control y sequía.
+
+# Implicaciones
+
+Los resultados referentes a las tasas de crecimiento y al éxito reproductivo (presencia de flores y frutos) en los bosques andino amazónicos resaltan el importante impacto de las condiciones de disminución de agua en el suelo en la vegetación.
+
+Disponibilidad de agua es un factor crítico para la salud de los bosques (agravado por sequías frecuentes y más intensas) y producción de la vegetación.
+
+Información que complemente el estudio
+
+Planes de manejo y gestión que protejan especies vulnerables a la sequía y proporcione pautas para el cuidado y manejo de la cuenca
+
+## Mensaje para llevar
+
+La respuesta de la vegetación del sotobosque piemontano en este experimento coincide con las respuestas de los bosques de la Amazonía a nivel general:
+
+-   Reducción del crecimiento
+-   Reducción de biomasa
+-   Cambio en la composición de especies, la vegetación beneficiada en las parcelas sequía era de tipo herbácea (*Poacea, Urticaceae, Piperacea*)
+
+La vegetación del sotobosque se vería afectada por la sequía antes de que se observen sus efectos en los árboles [@tng2022].
+
+##  {background-image="theme/agradecimiento2.png" background-position="left" background-size="contain"}
+
+:::::: centerh
+::: {.column width="55%"}
+:::
+
+:::: {.column width="45%"}
+::: {.callout-tip icon="false" title="Agradecimiento" appearance="simple"}
+Agradezco a la Universidad Regional Amazónica Ikiam, a la Carrera de Hidrología y al personal administrativo que me apoyo durante este proceso. Al proyecto AWESOME, en especial a Heidy Asbjorsen, Cameron Mcintire y Mauro Brum. A mi tutor Jorge Celi y cotutor Gabriel Gaona. A los estudiantes que me ayudaron en las distintas etapas del proyecto: Daniel, Jonier, Sedney, Joselin, Daniela, Tania, José, Polivio, Karla, Alex, Shyrma
+
+A mis amigos del Laboratorio de Servicios Hidrometeorológicos: Alexander, Daniela, Tania, Ariana, Ariel, Rafaela.
+
+Y por sobre todos, a mi familia por el cariño y el infantable apoyo que siempre me dan.
+:::
+::::
+::::::
+
+------------------------------------------------------------------------
+
+::::::: centerh
+:::::: columns
+::: {.column width="450px"}
+![](theme/logos-contraportada.svg)
+:::
+
+:::: {.column width="650px"}
+::: {.callout-note icon="false" title="María Fernanda Muñoz" appearance="simple"}
+<b>Estudiante U-Ikiam <br>Carrera de Hidrología</b><br> <br> <br> Correo electrónico: [maria.munoz\@est.ikiam.edu.ec](maria.munoz@est.ikiam.edu.ec)<br> Dirección: Muyuna, kilómetro 7 vía a Alto Tena<br> Teléfono: (+593) 99 999 9999
+:::
+::::
+::::::
+:::::::
+
+# Referencias
+
+<!-- # Luminosidad -->
+
+<!-- ```{r} -->
+
+<!-- #| label: fig-luminosidadparcela -->
+
+<!-- #| fig-width: 10 -->
+
+<!-- #| fig-height: 7 -->
+
+<!-- #| fig-cap: "Experimento para medir los niveles de luminosidad (Lx) a) comparación de la luminosidad a 150 cm por encima del suelo en las parcelas de sequía y control, b) dentro de las parcelas de sequía a 150 cm del suelo y 15 cm por encima del techo" -->
+
+<!-- #| out-width: 15cm -->
+
+<!-- #| out-height: 10.5cm -->
+
+<!-- #| fig-dpi: 300 -->
+
+<!-- load("../luz/output/tablas/luz_promedio_diario.rda") -->
+
+<!-- load("../luz/output/tablas/data_full_luz.rda") -->
+
+<!-- p1 <- avg_luz %>%  -->
+
+<!--   mutate(avg_d_t =  avg_d_t/1000,  -->
+
+<!--          avg_d_s =  avg_d_s/1000) %>%  -->
+
+<!--   ggscatter(x = "avg_d_t", y = "avg_d_s",  -->
+
+<!--             facet.by = "plot", -->
+
+<!--             add = "reg.line", -->
+
+<!--             color = "plot") +  -->
+
+<!--   stat_cor(label.x.npc = "right", -->
+
+<!--            label.y.npc = "bottom", -->
+
+<!--            hjust = 1, -->
+
+<!--            vjust = -1) + -->
+
+<!--   stat_regline_equation(label.x.npc = "right", -->
+
+<!--                         label.y.npc = "bottom", -->
+
+<!--                         hjust = 1, -->
+
+<!--                         vjust = 0) + -->
+
+<!--   xlab("Sobre el techo [kLux]") + -->
+
+<!--   ylab("Bajo el techo  [kLux]") + -->
+
+<!--   theme(panel.grid = element_blank()) -->
+
+<!-- avg_luz_suelos <- b %>% -->
+
+<!--   pivot_wider(id_cols = c(sitio, plot, fecha), -->
+
+<!--               names_from = tratamiento, -->
+
+<!--               values_from = luz) %>%  -->
+
+<!--   na.omit() %>% -->
+
+<!--   group_by(sitio, plot,  -->
+
+<!--            fecha = floor_date(fecha, "hour")) %>%  -->
+
+<!--   summarise(avghluzC = mean(C), -->
+
+<!--             avghluzD = mean(D), -->
+
+<!--             .groups = "drop") %>%  -->
+
+<!--   group_by(sitio, plot, -->
+
+<!--            fecha = floor_date(fecha, "day")) %>%  -->
+
+<!--   summarise(avg_d_C = mean(avghluzC)/1000, -->
+
+<!--             avg_d_D = mean(avghluzD)/1000, -->
+
+<!--             .groups = "drop") -->
+
+<!-- p2 <- avg_luz_suelos %>%  -->
+
+<!--   ggscatter(x = "avg_d_D", y = "avg_d_C",  -->
+
+<!--             facet.by = "plot", -->
+
+<!--             add = "reg.line", -->
+
+<!--             color = "plot") +  -->
+
+<!--   stat_cor(label.x.npc = "right", -->
+
+<!--            label.y.npc = "bottom", -->
+
+<!--            hjust = 1, -->
+
+<!--            vjust = 0) + -->
+
+<!--   stat_regline_equation(label.x.npc = "right", -->
+
+<!--                         label.y.npc = "bottom", -->
+
+<!--                         hjust = 1, -->
+
+<!--                         vjust = 1) + -->
+
+<!--   labs(x = "Tratamiento [kLux]", y = "Control [kLux]") -->
+
+<!-- p2 + p1 + guide_area() +  -->
+
+<!--    plot_annotation(tag_levels = "a", tag_suffix = ")") + -->
+
+<!--    plot_layout(guides = "collect", ncol = 1, -->
+
+<!--                heights = c(5, 5, 1)) -->
+
+<!-- ``` -->

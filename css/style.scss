@@ -1,0 +1,81 @@
+/*-- scss:defaults --*/
+
+//colors
+$link-color: #42affa;
+$footer-background: #e8e8e8 !default;
+
+//fonts
+@import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+$font-family-sans-serif: 'Fira Sans', sans-serif;
+
+//font size
+$presentation-font-size-root: 36px;
+$presentation-h1-font-size: 1.8em;
+
+/*-- scss:rules --*/
+
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+}
+
+.fira-sans-regular {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.fira-sans-bold {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 700;
+  font-style: normal;
+}
+
+.fira-sans-regular-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 400;
+  font-style: italic;
+}
+
+.fira-sans-bold-italic {
+  font-family: "Fira Sans", sans-serif;
+  font-weight: 700;
+  font-style: italic;
+}
+
+.centerh {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100%;
+}
+        
+#title-slide .subtitle, 
+div.reveal div.slides section.quarto-title-block .subtitle {
+  margin-bottom:6rem
+}  
+
+.reveal .footer {
+    color: #ffffff;
+    /*background-color: $footer-background;*/
+    display: block;
+    position: fixed;
+    padding-bottom: 0px;
+    padding-top: 0px;
+    bottom: 0px !important; // Makes footer div flush with bottom of slide
+    width: 100%;
+    z-index: 2 !important; // Sets the footer div further down the z-index
+  }
+  
+.reveal .slide-logo {
+    margin-bottom: 5px !important; // Lowers logo more in line with rest of footer
+    z-index: 5 !important; // Keeps logo above footer div
+  }
+ 
+.large{
+  font-size: 1.2em;
+}
+
+.Large{
+  font-size: 1.6em; 
+}

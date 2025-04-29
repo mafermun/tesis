@@ -1,0 +1,925 @@
+---
+title: "Experimento de exclusión de precipitación: Efectos en la humedad del suelo y la comunidad de plantas del bosque piemontano en Tena-Napo, Ecuador"
+author: "María Fernanda Muñoz Macías"
+format: 
+  pdf: default
+  wiley-njd-pdf: default
+  docx: 
+    reference-doc: plantilla-tesis.docx
+editor: visual
+bibliography: references.bib
+lang: es
+execute: 
+  warning: false
+  message: false
+  echo: false
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(lubridate)
+library(knitr)
+library(kableExtra)
+library(zoo)
+library(scales)
+library(ggstatsplot)
+library(ggrepel)
+library(ggpmisc)
+library(readxl)
+library(ggpubr)
+library(patchwork)
+source("R/99_funciones.R")
+
+theme_set(theme_bw(base_size = 10))
+
+```
+
+# Introducción
+
+El calentamiento global, al ser la principal causa de cambio climático, puede alterar los patrones de precipitación en cuanto a escala y frecuencia, provocando eventos extremos como las sequías [@bolan2024; @bonal2016]. Algunos estudios señalan condiciones más húmedas para el Ecuador en escenarios futuros bajo cambio climático [@campozano2020]. Sin embargo, modelos de predicción pierden efectividad en regiones topográficas complejas en Ecuador, como las vertientes orientales de los Andes, debido a la alta variabilidad de microclimas y llegan a sobreestimar las cantidades de precipitación [@chimborazo2021; @wongchuig2023; @portalanza2024]. Proyecciones climáticas basadas en trayectorias de concentración representativa (RCP, por sus siglas en inglés) resaltan una reducción significativa en la media de los patrones de precipitación [@portalanza2024]. Por lo cual, se espera que para la amazonía ecuatoriana, la media de la precipitación se reduzca aproximadamente en 24.54 mm [@portalanza2024]. Las tendencias en la reducción de la media normal de la precipitación en la Amazonía tiene implicaciones en la disponibilidad del agua en el suelo y las respuestas ecológicas de los bosques tropicales amazónicos[@knapp2008]. Por ejemplo, durante las sequías de 2005 y 2010 se registraron cambios en características de los bosques tropicales amazónicos, como producción neta de biomasa y mortalidad de la vegetación con consecuencias en el balance y secuestro de CO~2~ [@campozano2020].
+
+Una característica importante de los bosques tropicales amazónicos son los suelos permanentemente húmedos debido a la alta pluviosidad y a los eventos extremos de precipitación [@mu2022]. La precipitación influye en la cantidad de humedad en el suelo, principalmente en las capas superficiales [@liang2024]. A medida que aumenta la profundidad del suelo esta influencia disminuye considerablemente [@liang2024]. A escala de evento de precipitación, la respuesta de la humedad del suelo a la intensidad de lluvia es más visible en la capa superior del suelo hasta los 40 cm de profundidad, pero esta profundidad podría variar en función de las condiciones antecedentes del suelo [@zhu2021; @liu2021]. Otras características de la precipitación que también modifican la respuesta de humedad en el suelo son la duración, cantidad y/o frecuencia de los eventos de lluvia [@zhu2021].
+
+La humedad del suelo debido a su interacción con el sistema climático es esencial para cumplir procesos ecohidrológicos como el crecimiento de la vegetación, producción de biomasa y las interacciones vegetales dentro de las comunidades y entre comunidades [@dasilvasallo2017; @delima2023; @haiyan2021; @liu2021]. La vegetación, por su sensibilidad a los cambios ambientales, refleja el impacto de posibles alteraciones en la disponibilidad de agua en el suelo a causa de la disminución de entrada de agua por precipitación [@dasilvasallo2017]. El estrés hídrico ejerce un control de primer orden sobre la estacionalidad de la vegetación de los bosques tropicales [@wey2022]. Dicho estrés genera el desprendimiento de las hojas de los árboles creando brechas que alteran la estructura del dosel, la disminución de la respiración celular y del balance general de carbono en el suelo [@lopesribeiro2021; @rubol2013; @wey2022; @saatchi2012]. Conocer cómo varía la humedad en el suelo permite entender la interacción de los procesos hidrológicos del suelo con la vegetación de los bosques tropicales [@zhang2022]. Los experimentos de exclusión de precipitación permiten evaluar respuestas de la vegetación a los cambios en la humedad del suelo generados por la disminución controlada de las entradas de agua por precipitación en un ecosistema [@asbjornsen2018]. Se han realizado experimentos de exclusión de precipitación en regiones tropicales o húmedas subtropicales que demuestran que los cambios en la humedad del suelo generan respuestas en la vegetación, como incremento de la tasa de mortalidad de los árboles y cambios en la estructura del bosque [@dacosta2014; @fisher2007; @nepstad2007; @bonal2016]. Estas respuestas en conjunto pueden afectar la capacidad del bosque para secuestrar carbono de la atmósfera y provocar alteraciones en el ciclo hidrológico [@dacosta2014; @gavinet2019].
+
+Los experimentos de exclusión de precipitación demostraron ser beneficiosos para observar la dinámica entre agua, suelo y plantas de los bosques al reducir las entradas de agua por precipitación y proporcionar información a corto, mediano o largo plazo de los ecosistemas [@gavinet2019; @lin2023]. Entender el efecto de la reducción de la precipitación en la humedad del suelo y la vegetación ayudaría a descubrir posibles cambios en los servicios de regulación de los bosques tropicales [@ostendorf2001; @abbass2022]. En la amazonía ecuatoriana los estudios de la dinámica entre la humedad del suelo y la vegetación del sotobosque han sido escasos hasta el presente. Por ello, se pretende llenar este vacío de información a través del proyecto Andean - Amazonian Watershed Experience: Exploring Sustainability of Mountain Ecosystems in Ecuador (AWESOME) se establecieron seis parcelas experimentales para mejorar el entendimiento de estas dinámicas en la amazonía ecuatoriana. Este estudio pretende evaluar las respuestas, bajo condiciones naturales y de exclusión de la precipitación, de la humedad del suelo y su efecto en la vegetación del sotobosque.
+
+# Metodología
+
+## Sitio de estudio
+
+Las parcelas experimentales se localizan en el *Bosque de la Ciencia* de la Universidad Regional Amazónica Ikiam (0°56'47.24'' S, 77°52'14.45'' O) en el cantón Tena de la provincia de Napo, Ecuador (@fig-mapaubicacion). El sitio de estudio es un bosque siempreverde piemontano del norte - centro de la cordillera oriental de los Andes, caracterizado por un dosel cerrado. La altura de los árboles alcanza los 35 - 40 metros de altura [@ministeriodeambientedelecuador2012]. El tipo de clima es mesotérmico húmedo con poco déficit de agua [@maza2022]. La temperatura promedio del lugar es de 22.9 °C y la precipitación promedio anual es de 4350 mm [@lshm]. El patrón de lluvia mensual muestra un comportamiento bimodal, con picos de precipitación en los meses de mayo - junio y octubre (@fig-climograma). Las parcelas de estudio están entre los 637 - 644 msnm y cuentan con suelos ácidos y bien drenados [@ministeriodeambientedelecuador2012]. El suelo se constituye principalmente por gran cantidad de materia orgánica en una matriz fina (arcillas - limos) y a 60 cm de profundidades arena arcillo - limosa. (**CITAR A SEDNEY**). Y se asume que no hay diferencias importantes entre el suelo de las parcelas control y de sequía, porque hay corta distancia entre ellas y además están en la misma formación geológica (tiyuyacu [@egüez2017]) y en las mismas condiciones geomorfológicas (abanico aluvial [@cuenca2022]) (citar a Sedney). Esta composición en el suelo permite que el agua infiltre sin problemas por el alto contenido en arena [@teo]. El sitio donde se ubica el experimento es un bosque secundario de aproximadamente 40 años y entre las familias de vegetación dominantes están Piperaceae, Poaceae, Melastomataceae, Gesneriaceae, Fabaceae, Rubiaceae, Urticaceae, Araceae, Areacaceae, Siparunaceae, Moraceae, Solanaceae, entre otras [@teo].
+
+![Mapa del sitio de estudio con sistema de coordenadas EPGS:32718. c) Puntos de la zona de interés como el sitio de estudio y la estación meteorológica M5147 de la Universidad Regional Amazónica Ikiam. a) Una de las parcelas de sequía dentro del sitio de estudio. b) Una de las parcelas control dentro del sitio de estudio. d) Ubicación del sitio experimental en la provincia de Napo - Ecuador.](mapa/tesis_ubicacion.png){#fig-mapaubicacion}
+
+```{r}
+#| label: fig-climograma
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Climograma de la estación meteorológica M5147, de la Universidad Regional Amazónica Ikiam. Período 2022 - 2024. La relación de los ejes ordenados es de 1:4"
+#| out-width: 14cm
+#| out-height: 9.33cm
+#| fig-dpi: 300
+
+load("../Precipitación/data/pcp_ta_data.rda")
+
+climograma <- pcp_ta_data %>% 
+  mutate(tan = if_else(is.infinite(tan), NA, tan),
+         tax = if_else(is.infinite(tax), NA, tax)) %>% 
+  group_by(fecha = floor_date(fecha, "day")) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+           tam = mean(tam, na.rm = T),
+           tan = min(tan, na.rm = T),
+           tax = max(tax, na.rm = T),
+           .groups = "drop") %>% 
+  group_by(fecha = floor_date(fecha, "month")) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+            tam = mean(tam, na.rm = T),
+            tan = min(tan, na.rm = T),
+            tax = max(tax, na.rm = T),
+            .groups = "drop") %>% 
+  group_by(fecha = month(fecha, label = T)) %>% 
+  summarise(pcp = sum(pcp, na.rm = T),
+            tam = mean(tam, na.rm = T),
+            tan = min(tan, na.rm = T),
+            tax = max(tax, na.rm = T),
+            .groups = "drop")
+
+ggplot(climograma) +
+  aes(x = fecha) +
+  geom_col(aes(y = pcp, fill = "Precipitación", color = "Precipitación")) +
+  geom_ribbon(aes(ymin = tan * 4, ymax = tax * 4, 
+                  group = 2, fill = "Temperatura"), 
+              alpha = 0.3) +
+  geom_line(aes(y = tam * 4, group = 1, color = "Temperatura")) +
+  scale_y_continuous(sec.axis = sec_axis(transform = ~ ./4, 
+                                         name = "Temperatura [°C]")) +
+  scale_fill_manual(name = "Variables", 
+                    values = c("Precipitación" = "lightblue", 
+                               "Temperatura" = "red")) +
+  scale_color_manual(name = "Variables", 
+                     values = c("Precipitación" = "steelblue", 
+                                "Temperatura" = "red")) +
+  labs(y = "Precipitación [mm]") +
+  theme(panel.grid = element_blank(), 
+        axis.title.x = element_blank(), 
+        legend.title = element_blank(),
+        legend.position = "inside",
+        legend.position.inside = c(0.01, 0.99), 
+        legend.justification = c(0, 1))
+```
+
+## Diseño experimental
+
+Se establecieron seis parcelas experimentales cada una cuenta con un área de 25 m², en un bosque siempreverde piemontano del norte - centro de la Cordillera Oriental de los Andes. Los sitios elegidos para la instalación de las parcelas control y sequía se distinguían por ser más abiertos y albergar vegetación de tamaño menor a 100 cm, ideal para la instalación de los techos. En tres de las seis parcelas se instalaron techos impermeables para simular la disminución de precipitación. Cada 2 - 4 semanas se realizó la limpieza de los techos para retirar la hojarasca acumulada, secarla y posteriormente colocarla dentro de las parcelas de sequía. Las tres parcelas restantes no fueron intervenidas para establecerlas como control. Cada parcela control y de sequía se dividió en 36 subparcelas de aproximadamente 83 cm, dispuestas como una malla rectangular. Todos los experimentos se realizaron en 3 subparcelas (escogidas al azar) de entre 16 subparcelas interiores en cada parcela, excluyendo las 20 subparcelas exteriores para evitar el efecto de borde. Las subparcelas observadas se seleccionaron mediante un generador de números al azar. Las variables observadas son el crecimiento longitudinal del tallo, número de hojas, presencia de flores y/o frutas, estado (vivo o muerto) y humedad del suelo con y sin influencia de la precipitación.
+
+## Datos
+
+### Precipitación
+
+Los datos de precipitación fueron analizados dentro y fuera del bosque. La lluvia exterior (fuera del bosque) se monitoreó en la estación meteorológica M5147 de la Universidad Regional Amazónica Ikiam, la cual está a 595 msnm y a un km de la zona de estudio. La lluvia dentro del bosque se monitoreó con un pluviómetro instalado dentro de la zona de estudio. La precipitación fue separada por eventos mediante el método IETD, los eventos fueron agrupados mediante K-means [@patino2023; @moreira2024] y se organizaron de menor a mayor según la intensidad de los eventos.
+
+#### Identificación de eventos de precipitación
+
+La definición de tiempos inter-eventos (IETD) son usados para determinar el periodo mínimo sin lluvia entre eventos de precipitación consecutivos [@jun2021]. Los eventos de precipitación se caracterizan de acuerdo al volumen, duración, intensidad, tiempo inter-evento, pico de intensidad y número de picos [@joo2013]. En este análisis las características de la precipitación fueron fecha de inicio, fecha fin, duración, volumen, intensidad y total de horas previas sin precipitación. La separación de eventos de precipitación requiere de dos parámetros, uno indica el umbral de tiempo y otro señala la intensidad de lluvia (mm/h). Mediante pruebas realizadas se estableció que los mejores valores para los parámetros mencionados anteriormente son 8 y 10, respectivamente.
+
+#### Categorización de eventos de precipitación
+
+Un análisis de clusters K-means fue usado para identificar grupos de precipitación con características similares, previo a esto se utilizó el método método wss (within sum of squares) para definir el número de clusters [@firat2012; @moreira2024]. Se obtuvieron 4 clusters y para organizarlos en categorías se tomó en cuenta la intensidad de la precipitación, siendo la Categoría 1 menos intensa y la Categoría 4 la más intensa.
+
+### Humedad del suelo
+
+El contenido volumétrico de agua se registró mediante 12 sensores Meter TEROS 10 soil water content calibrados previamente. Se instalaron en total dos sensores por parcela: en la zona de enraizamiento de las plantas a 15 cm de profundidad y en la zona sin raíces a 60 cm. La calibración consistió en la toma de muestras de suelo a 15 y 60 cm de profundidad con cilindros de 25 cm de diámetro y 15 cm de alto. Con las muestras de suelo saturadas de agua durante 3 días. Las muestras de suelo saturadas se colocaron sobre soportes para drenar el contenido de agua durante 4 semanas. De las muestras de suelo se tomaron submuestras diarias con cilindros de 2.8 cm de diámetro y 3.5 cm de alto diariamente durante 4 días en la primera semana y una sola vez en la segunda, tercer y quinta semana. Se determinó la humedad del suelo de las submuestras mediante el método gravimétrico. Finalmente, mediante ecuaciones se calcula el contenido volumétrico de agua (VWC, por sus siglas en inglés) y realizar una regresión polinómica de tercer grado para convertir los valores RAW obtenidos por el sensor en VWC.
+
+### Vegetación
+
+Entre julio de 2022 y diciembre 2024 se etiquetaron las plantas existentes en cada subparcela de estudio, con una cinta para identificarlas. Los monitoreos de vegetación se basan en la medición del crecimiento longitudinal del tallo, el número de hojas por individuo y presencia de flores y/o frutos, dentro de cada subparcela estudiada. La toma de estos datos se realiza en periodos variables separados de en promedio cada 53 días. Las tasas de cambio en el crecimiento y de la cantidad de hojas de la vegetación se calcularon a través de un modelo lineal.
+
+### Luminosidad
+
+Considerando que la disponibilidad de luz es importante en el crecimiento de las plantas, se realizaron dos experimentos con el fin de entender posibles efectos secundarios. El primer experimento permitió entender las diferencias de la luminosidad a 150 cm sobre el suelo entre las parcelas control y sequía. El segundo experimento permitió determinar la cantidad de luz que se reduce por la implementación del techo. Para el segundo experimento se midió la luminosidad debajo del techo a 150 cm sobre el suelo y a 15cm sobre el techo. Mediante un análisis de regresión lineal se determinó si existe diferencia en la luminosidad entre: (1) las parcelas control frente a los de sequía y, (2) entre la luminosidad por encima y bajo el techo en las parcelas de sequía. Es importante mencionar que durante la ejecución de estos experimentos el techo de las parcelas de sequía se cubrió paulatinamente con hojarasca proveniente del dosel superior.
+
+### Periodos de registro de datos y tipos de sensores
+
+El periodo de registro de cada variable fue distinto debido a factores como: disponibilidad del sensor, tiempos de calibración y mantenimiento/reparación. A continuación, en la @fig-disponibilidaddata se observa los periodos de registro de datos. En la @tbl-especificaciones se detalla el tipo de sensor, precisión y resolución temporal de cada equipo.
+
+```{r}
+#| label: fig-disponibilidaddata
+#| fig-width: 6.5
+#| fig-height: 4
+#| fig-cap: "Registro de datos disponibles para cada sensor, organizado por tipo de variable, tratamiento, parcela y ubicación."
+
+load("../Precipitación/data/pcp_ta_data.rda")
+load("../Sensor de humedad/data/sm_data_clean.rda")
+load("../luz/output/tablas/data_full_luz.rda")
+load("../Precipitación/output/tablas/data_clean_pcp_parcelas.rda")
+
+b <- b %>% 
+  group_by(tratamiento, plot, sitio, fecha = floor_date(fecha, "hour")) %>% 
+  summarise(n = sum(!is.na(luz)), 
+            log = mean(luz, na.rm = T) %>% round(1)) %>% 
+  mutate(log = if_else(n > 6, 1, NA_integer_)) %>% 
+  select(-n) %>% 
+  rename(esp = sitio)
+
+data_pcp_f <- select(data_pcp_f, -intensity_mmh) %>% 
+  mutate(log = if_else(!is.na(pcp_f), 1, NA_integer_),
+         tratamiento = "Bosque") %>% 
+  select(-pcp_f)
+
+pcp_ta_data <- select(pcp_ta_data, 1, 2) %>% 
+   mutate(log = if_else(!is.na(pcp), 1, NA_integer_), 
+          tratamiento = "Estación") %>% 
+  select(-pcp)
+
+sm_data_clean <- select(sm_data_clean, -sensor) %>% 
+  rename(fecha = Timestamp, 
+         esp = depth, 
+         tratamiento = treatment) %>% 
+  mutate(log = if_else(!is.na(raw), 1, NA_integer_), 
+         esp = paste0(esp, "cm")) %>% 
+  select(-raw)
+
+list("Luminosidad" = b,
+     Prec. = bind_rows(data_pcp_f, Pcp = pcp_ta_data), 
+     "Humedad del suelo" = sm_data_clean) %>% 
+  bind_rows(.id = "variable") %>%
+  right_join(tibble(fecha = seq(min(.$fecha, na.rm = T), max(.$fecha, na.rm = T), by = "hour")), 
+             by = "fecha") %>% 
+  mutate(tratamiento = recode(tratamiento, C = "Control", Droguht = "Sequía", D = "Sequía"),
+         esp = recode(esp, `T` = "Techo", S = "Suelo")) %>% 
+  unite(col = "sensor", tratamiento, plot, esp, sep = " ", na.rm = TRUE) %>% 
+  ggplot(aes(fecha, sensor, color = log)) +
+  geom_tile(show.legend = FALSE, height = 0.2, fill = NA) +
+  scale_color_continuous(na.value = "#ffffff00") +
+  facet_grid(variable~., scales = "free_y", space = "free") +
+  theme(panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        axis.title.y = element_blank()) 
+
+```
+
+| Variable | Equipo | Precisión | Resolución |
+|------------------|------------------|------------------|------------------|
+| Precipitación | METER ECRN-100 | 0.2 mm | Cada hora |
+| Humedad del suelo | Meter TEROS 10 soil water content | 0.0000 – 0.6400 m^3^/m^3^ | Cada hora |
+| Luminosidad | Onset UA-002-64 HOBO Pendant® Temperature/Light 64K Data Logger | Diseñado para la medición de niveles relativos de luz | Cada 5 minutos |
+
+: Especificaciones técnicas de los sensores utilizados en el sitio de estudio para medir las variables de precipitación, humedad del suelo y luminosidad. {#tbl-especificaciones}
+
+### Tratamiento de datos y análisis
+
+Los datos de todas las variables meteorológicas, hidrológicas y de vegetación fueron pasados por un proceso de curación, sistematización y análisis. Todos estos procesamientos se realizaron en R versión 2024.12.0 [@base].
+
+# Resultados
+
+## Precipitación
+
+Los eventos de precipitación obtenidos mediante el IETD fueron en total de 251 para la estación y 142 para el bosque. De estos eventos, 116 coincidieron entre la estación y el bosque. Los eventos fueron organizados en 4 categorías, ordenadas según la intensidad media de los eventos de precipitación (@tbl-caracteristasprecipitacion). Los eventos de Categoría 2 son los que mayor ocurrencia tienen en ambos sitios y se caracterizan por su larga duración, alto volumen y baja intensidad. Las Categorías 1 y 4, describen eventos extremos de precipitación de baja y alta intensidad, respectivamente. Por último, se observa que el mayor número de horas previas sin precipitación con ocurrencia en ambos sitios corresponde a la Categoría 3.
+
+```{r}
+#| label: tbl-caracteristasprecipitacion
+#| tbl-width: 6
+#| tbl-height: 4
+#| tbl-cap: "Promedios y desviación estándar de cada agrupamiento de eventos de precipitación por las cuatro características del evento usando el algorítmo K-means."
+
+load("../Precipitación/output/tablas/categorias_evpcp.rda")
+
+categorias_evpcp %>% 
+  rename(Sitio = sitio) %>% 
+  mutate(Variable = recode(Variable, 
+                           numero_eventos = "Respuestas",
+                           Sin_precipitacion = "Total de horas previas sin precipitación",
+                           Duracion = "Duración (h)",
+                           Volumen = "Volumen (mm)",
+                           Intensidad = "Intensidad (mm/h)")) %>% 
+  knitr::kable(align=c("l", "l", rep('c', 4)))# %>% 
+  #add_header_above(c(" " = 2, "Eventos de Precipitación" = 4)) %>%
+  # kableExtra::collapse_rows(columns = 1:2, valign = "top")
+
+```
+
+Los eventos de precipitación fueron caracterizados a través de la duración (h), horas previas sin lluvia, volumen (mm) e intensidad (mm/h) y se compararon los datos registrados dentro del bosque cerca del experimento y los datos registrados por la estación M5147. Durante los dos años de estudio la precipitación promedio mensual registrada por la estación meteorológica fue de 362 mm y en el bosque fue de 314 mm. Mediante el test de Mann-Whitney se encontró que no existen diferencias significativas para las cuatro características comparadas entre la lluvia dentro del bosque y la lluvia fuera del bosque. La duración de precipitación en ambos sitios es similar, el bosque presenta un rango entre 9 - 20 horas y la estación tiene un rango de 9 - 24 horas. En cuánto a la intensidad según la @fig-caracteristasprecipitacion, la mayor parte de observaciones para el bosque se encuentra en un rango aproximado de 1 a 12 mm/h, mientras que en las estación las observaciones se acumulan en un rango de aproximadamente 1 a 11 mm/h. Mediante la @fig-caracteristasprecipitacion, se observa que la concentración de horas previas sin precipitación es ligeramente mayor en la estación a diferencia del bosque que no presenta valores extremos. El volumen de precipitación registrado dentro del bosque tiene un mayor rango de observaciones que las registradas por la estación. Sin embargo, en ambos sitios los datos se concentran entre aproximadamente los 10 y 50 mm.
+
+```{r}
+#| label: fig-caracteristasprecipitacion
+#| fig-width: 6
+#| fig-height: 4.5
+#| fig-cap: "Características de eventos de precipitación. Todas las comparaciones entre pares de grupos con 116 observaciones, mediante el test de Mann-Whitney, mostraron diferencias no significativas (valor-p < 0.05), con estadísticos _W_ que variaron entre 6172 y 7512. La figura a)"
+#| out-width: 14cm
+#| out-height: 10cm
+#| fig-dpi: 300
+
+load("../Precipitación/output/tablas/eventos_match70.rda")
+
+p_c <- eventos_match %>% 
+  select(duration.x, duration.y, intensity.x, intensity.y, 
+         volume.x, volume.y, no_rain.x, no_rain.y) %>% 
+  pivot_longer(everything(), 
+               names_to = c("Variable", "Sitio"), 
+               names_pattern = "(.*).(.)",
+               values_to = "Valor") %>% 
+  mutate(Sitio = recode(Sitio, "x" = "Estación", "y" = "Bosque"),
+         Variable = recode(Variable,
+                           duration = "Duración (h)",
+                           intensity = "Intensidad (mm/h)",
+                           no_rain = "Horas previas sin precipiación",
+                           volume = "Volumen (mm)")) %>% 
+  grouped_ggbetweenstats(
+    Sitio, `Valor`, pairwise.display = "all",
+    type = "nonparametric",
+    grouping.var = Variable,
+    ggtheme = theme_tesis(base_size = 8),
+    results.subtitle = FALSE,
+    centrality.label.args = list(size = 2, 
+                                 nudge_x = 0.4, 
+                                 segment.linetype = 4,
+                                 min.segment.length = 0),
+    point.args = list(
+      position = ggplot2::position_jitterdodge(dodge.width = 0.6),
+      alpha = 0.4, size = 2, 
+      stroke = 0, na.rm = TRUE), 
+    boxplot.args = list(linewidth = 0.25, alpha = 0.2, na.rm = TRUE), 
+    violin.args = list(linewidth = 0.25, alpha = 0.2, na.rm = TRUE)) &
+  theme(panel.grid = element_blank())
+p_c +
+  plot_annotation(tag_levels = "a", tag_suffix = ")")
+
+```
+
+## Humedad del suelo
+
+```{r}
+#| label: fig-serietemporalhumedadsuelo
+#| fig-width: 7
+#| fig-height: 5
+#| fig-cap: "Serie temporal de la humedad del suelo a diferentes profundidades en las parcelas experimentales, durante el periodo 2023 hasta 2025."
+#| out-width: 16cm
+#| out-height: 11.4cm
+#| fig-dpi: 300
+
+load("../Sensor de humedad/data/sm_data_clean.rda")
+load("../Precipitación/output/tablas/pcp_diario_est.rda")
+
+pcp_diario_est =
+  pcp_diario_est %>% 
+  mutate(pcp2 = scales::rescale(pcp, c(0.9, 0.7)))
+
+
+
+sm_data_clean %>% 
+  ggplot() +
+  aes(Timestamp, raw, color = factor(depth)) +
+  geom_line() +
+  geom_segment(aes(xend = fecha, yend = pcp2, x = fecha, y = 0.9, color = "Precipitación"), data = pcp_diario_est) +
+  scale_y_continuous(sec.axis = 
+                       sec_axis(~rescale(., 
+                                         range(pcp_diario_est$pcp, na.rm = T), 
+                                         c(0.9, 0.7)),
+                                name = "Precipitación (mm/día)", 
+                                breaks = c(0, 50, 100, 150))) +
+  facet_grid(plot~treatment, 
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Droguht"= "Sequía"), 
+               plot = c(A = "Parcela A", B = "Parcela B", C = "Parcela C"))) +
+  labs(y = expression(paste("Contenido volumétrico de agua [cm"^3," cm"^-3,"]")), 
+       color = "Profundidad\n[cm]") +
+  theme(legend.title = element_text(hjust = 0.5), 
+        axis.title.x = element_blank())
+```
+
+En la serie temporal de la [@fig-serietemporalhumedadsuelo] se observan dinámicas diferentes en las parcelas control y las parcelas de sequía. Los datos muestran que la saturación del suelo del área de estudio está alrededor de 0.75 cm^3^/cm^3^. La serie temporal muestra también los periodos interrumpidos en ele registro de la humedad del suelo. El contenido volumétrico muestra diferencias entre las parcelas de sequía y las parcelas control (KS test: D = 0.80346 y p - valor \< 0.001) (@fig-boxplotsm). Al comparar la capa a los 15 cm de profundidad se encontraron que las diferencias significativas (KS test: D = 0.40629 y p - valor \< 0.001) son más marcadas que a los 60 cm (KS test: D = 0.72082 y p - valor \< 0.001). También se evidencia que en ambos tratamientos la humedad a los 60 cm es mayor que a los 15 cm de profundidad y son significativamente distintos entre ellos . En las parcelas de sequía la diferencia de contenido volumétrico de agua a diferentes profundidades es más evidente.
+
+En la serie temporal indicada en la @fig-serietemporalhumedadsuelo, se puede observar como el contenido volumétrico de agua en las parcelas de sequía a los 15 cm de profundidad se reduce notablemente desde julio de 2024.
+
+Las condiciones antecedentes promedio de humedad en las parcelas de sequía A, B y C, previas a los picos registrados a los 15 cm de profundidad fueron de 0.629 ± 0.0458 cm^3^ cm^-3^, 0.711 ± 0.0185 cm^3^ cm^-3^ y 0.638 ± 0.0375 cm^3^ cm^-3^, respectivamente. En cuánto a las condiciones antecedentes promedio a los 60 cm de profundidad de las parcelas de sequía A, B y C fueron de 0.701 ± 0.0146 cm^3^ cm^-3^, 0.736 ± 0.0167 cm^3^ cm^-3^ y 0.726 ± 0.0294 cm^3^ cm^-3^, respectivamente. El periodo de respuesta promedio de los sensores a partir del inicio de los eventos de precipitación en las parcelas control a los 15 cm fue de 2.27 ± 5.02 días y para las parcelas de sequía fue de 2.39 ± 3.12 días. El tiempo de respuesta de los sensores de humedad del suelo influenciado por la Categoría 2 de precipitación a los 15 cm en las parcelas control y tratamiento fueron de 0.833 ± 1.46 días y 2.375 ± 4.01 días. El promedio de tiempo de respuesta a los 60 cm de profundidad para las parcelas control y tratamiento fueron de 0.596 ±1.48 días y 0.265 ± 1.90 días, respectivamente.
+
+```{r}
+#| label: fig-boxplotsm
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Boxplot de contenido volumétrico de agua a diferentes profundidades en las parcelas de estudio. Existen diferencias significativas en el contenido volumétrico de agua entre las parcelas control y tratamiento. En las parcelas de sequía existen diferencias significativas en el contenido volumétrico de agua entre las profundidaes de 15 y 60 cm"
+#| out-width: 12cm
+#| out-height: 8cm
+#| fig-dpi: 300
+
+load("../Sensor de humedad/data/sm_data_clean.rda")
+
+
+a <- position_dodge(width = 0.8)
+
+
+sm_median <- sm_data_clean %>% 
+  group_by(treatment, plot, depth) %>% 
+  summarise(mediana = median(raw, na.rm = T))
+
+# prueba_ks <- ks.test(raw ~ treatment, data = sm_data_clean %>% 
+#                         filter(depth == 60)) 
+  
+sm_data_clean %>% 
+  ggplot() +
+  aes(plot, raw) +
+  geom_boxplot(aes(fill = factor(depth)), 
+               linewidth = 0.25, 
+               outlier.size = 0.5) +
+  geom_label_repel(data = sm_median,
+             mapping = aes(label = round(mediana, 3),
+                           y = mediana),
+             position = position_dodge(width = 0.8),
+             size = 2.8,
+             # nudge_x = 0.4,
+             segment.size = unit(0.5, "mm")) +
+  facet_grid(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Droguht"= "Sequía"))) +
+  labs(x = "Parcela",
+       y = expression(paste("Contenido volumétrico de agua [cm"^3," cm"^-3,"]")), 
+       fill = "Profundidad\n[cm]"
+  )+
+  theme(legend.title = element_text(hjust = 0.5), 
+        panel.grid = element_blank())
+
+```
+
+La humedad del suelo reaccionó a diferentes categorías de precipitación, excepto a la Categoría 1 [@fig-cantidadpicossmclusters].
+
+La respuesta de la humedad del suelo en distintas profundidades en las parcelas de sequía varía de una a otra. A los 60 cm de profundidad la mayor cantidad de respuestas se obtiene a partir de eventos de precipitación de Categoría 2, seguido por los eventos de Categoría 3 y Categoría 4. En los 15 cm de profundidad la mayor cantidad de respuestas de los sensores toma lugar en los eventos de Categoría 4, seguidos por la Categoría 3 y por la Categoría 2.
+
+```{r}
+#| label: fig-cantidadpicossmclusters
+#| fig-width: 6
+#| fig-height: 4
+#| fig-dpi: 300
+#| fig-cap: "Cantidad de respuestas de la humedad del suelo por categoría de eventos de precipitación en las parcelas de sequía"
+#| out-width: 14cm
+#| out-height: 9.33cm
+
+load("output/tablas/picos_sm_rain.rda")
+
+smpicos_pcp %>% 
+  ungroup() %>% 
+  filter(treatment == "Droguht", rsp.total > 0) %>% 
+  ggplot() +
+  aes(cluster, fill = factor(cluster)) +
+  geom_bar(position = "dodge", width = 1) +
+  geom_text(aes(label = ..count..), stat = "count", vjust = -0.2, 
+            size = 2.5) +
+  scale_y_continuous(limits = c(0,8)) +
+  facet_grid(profundidad ~ plot) +
+  labs(x = "",
+       y = "Nro. de respuestas",
+       fill = "Categoría") +
+  theme(axis.title.x = element_blank(), 
+        panel.grid = element_blank())
+```
+
+## Vegetación
+
+```{r}
+#| label: tbl-estadisticasdescriptivas
+#| tbl-width: 6
+#| tbl-height: 4
+#| tbl-cap: "Estadísticas descriptivas por tratamiento de las parcelas experimentales"
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+### promedio inicial y final de la atura ----
+
+initial_mean_alt <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>%
+  summarise(avg_alt = mean(altura) %>% round(1),
+            desv_alt = sd(altura) %>% round(1)) 
+
+final_mean_alt <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_alt = mean(altura) %>% round(1),
+            desv_alt = sd(altura) %>% round(1))
+  
+mean_alt <- bind_rows(list(final = final_mean_alt,
+                       initial = initial_mean_alt),
+                  .id = "status")
+
+### promedio inicial y final de numero de hojas ----
+
+initial_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_hoj = mean(hojas) %>% round(1),
+            desv_hoj = sd(hojas) %>% round(1))
+
+final_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA, plot) %>% 
+  summarise(avg_hoj = mean(hojas) %>% round(1),
+            desv_hoj = sd(hojas) %>% round(1))
+
+mean_hoj <- bind_rows(list(final = final_mean_hoj,
+                       initial = initial_mean_hoj),
+                  .id = "status")
+
+### tabla resumen
+
+stats_veg <- mean_alt %>% 
+  merge(mean_hoj) %>% 
+  arrange(desc(status)) %>% 
+  pivot_wider(names_from = status, values_from = starts_with(c("avg_", "desv_"))) %>% 
+  select(treatment, 
+         avg_alt_initial, desv_alt_initial, 
+         avg_alt_final, desv_alt_final,
+         avg_hoj_initial, avg_hoj_final,
+         desv_hoj_initial, desv_hoj_final) %>% 
+  transmute(Parcelas = treatment,
+            "Longitud del tallo inicial" = paste(avg_alt_initial, "(±", desv_alt_initial,")"),
+            "Longitud del tallo final" = paste(avg_alt_final, "(±", desv_alt_final,")"),
+            "Producción de hojas inicial" = paste(avg_hoj_initial, "(±", desv_hoj_initial,")"),
+            "Producción de hojas final" = paste(avg_hoj_final, "(±", desv_hoj_final,")"))
+
+
+
+stats_veg %>% 
+  knitr::kable(align=c("l", rep('c', 4))) #%>% 
+  #kable_paper(bootstrap_options = "striped", full_width = F) %>%
+  #add_header_above(c(" " = 1, "Momentos en la estructura vegetal" = 4))
+
+```
+
+Desde el inicio del experimento en julio de 2022 hasta el final en diciembre de 2024 la diferencia de la longitud promedio del tallo de la vegetación en las parcelas control fue de 28.9 cm y en las parcelas de sequía fue de 11 cm. De la misma manera, la diferencia de la producción promedio de hojas al final del experimento en las parcelas control fue de 1.5 y en las parcelas control fue de 0.6 [@tbl-estadisticasdescriptivas].
+
+```{r}
+#| label: fig-promediodealturasinicialyfinal
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Alturas promedio de las plantas por tratamiento y parcela, al inicio y final del monitoreo"
+#| out-width: 14cm
+#| out-height: 9.33cm
+#| fig-dpi: 300
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+initial_mean <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_head(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Altura = mean(altura, na.rm = T),
+            Desv = sd(altura, na.rm = T),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+final_mean <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Altura = mean(altura, na.rm = T),
+            Desv = sd(altura, na.rm = T),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+ 
+mean <- bind_rows(list(Final = final_mean,
+                       Inicial = initial_mean),
+                  .id = "status") %>% 
+  mutate(lbl = sprintf("%.1f\n(±%.1f)", Altura, Desv))
+
+ddg <- position_dodge(width = 0.25)
+ggplot(mean, aes(plot, Altura, color = status)) +
+  geom_errorbar(aes(ymin = Altura - Error.Std, 
+                    ymax = Altura + Error.Std, 
+                    color = status), width = 0.2 , 
+                position = ddg) +
+  geom_point(aes(shape = factor(status)), size = 2.2, position = ddg) +
+  ggrepel::geom_text_repel(aes(label = lbl), size = 2.5, point.padding = 0.3) +
+  facet_wrap(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_shape(name = "Monitoreo") +
+  scale_color_discrete(name = "Monitoreo") +
+  labs(x = "Parcela", y = "Altura [cm]") +
+  theme(panel.grid = element_blank())
+
+
+```
+
+El crecimiento de la longitud del tallo promedio de las parcelas de sequía es notablemente menor al crecimiento que tuvo lugar en las parcelas control desde el año 2022 hasta el 2024 (@fig-promediodealturasinicialyfinal). La cantidad de hojas promedio que se observaron en las plantas correspondientes a las parcelas de sequía al final del monitoreo es menor a la cantidad promedio que existió al inicio del monitoreo. En cambio, para las parcelas de sequía la cantidad de hojas en promedio aumentó para el final del experimento, como se indica en la @fig-promediodecantidaddehojasinicialyfinal.
+
+```{r}
+#| label: fig-promediodecantidaddehojasinicialyfinal
+#| fig-width: 6
+#| fig-height: 4
+#| fig-cap: "Cantidad de hojas por tratamiento y parcela al inicio y final del monitoreo"
+#| out-width: 14cm
+#| out-height: 9.33cm
+#| fig-dpi: 300
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+initial_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice(1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Hojas = mean(hojas),
+            Desv = sd(hojas),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+final_mean_hoj <- data_clean %>% 
+  group_by(treatment, plot, SUBPARCELA, Planta) %>% 
+  arrange(fecha) %>% 
+  slice_tail(n = 1) %>% 
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(Hojas = mean(hojas),
+            Desv = sd(hojas),
+            Error.Std = Desv / sqrt(n()),
+            .groups = "drop")
+
+mean_hoj <- bind_rows(list(Final = final_mean_hoj,
+                       Inicial = initial_mean_hoj),
+                  .id = "status") %>% 
+  mutate(lbl = sprintf("%.1f\n(±%.1f)", Hojas, Desv))
+
+ddg <- position_dodge(width = 0.25)
+ggplot(mean_hoj, aes(plot, Hojas, color = status)) +
+  geom_errorbar(aes(ymin = Hojas - Error.Std, 
+                    ymax = Hojas + Error.Std, 
+                    color = status), width = 0.2 , 
+                position = ddg) +
+  geom_point(aes(shape = factor(status)), size = 2.2, position = ddg) +
+  ggrepel::geom_text_repel(aes(label = lbl), size = 2.5, point.padding = 0.3) +
+  facet_wrap(~ treatment,
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_shape(name = "Monitoreo") +
+  scale_color_discrete(name = "Monitoreo") +
+  labs(x = "Parcela", y = "Número de hojas") +
+  theme(panel.grid = element_blank())
+
+```
+
+```{r}
+#| label: fig-frutosflores
+#| fig-width: 7
+#| fig-height: 3.5
+#| fig-dpi: 300
+#| fig-cap: "Cantidad de flores/frutos por tratamiento y parcela al inicio y final del monitoreo"
+#| out-width: 10cm
+#| out-height: 5cm
+
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+ff <- data_clean %>%
+  group_by(treatment, plot, SUBPARCELA, Planta) %>%
+  ungroup(Planta, SUBPARCELA) %>% 
+  summarise(frutos_flores = sum(`Flores frutos`, na.rm = T),
+            mean_ff = mean(`Flores frutos`, na.rm = T),
+            sd_ff = sd(`Flores frutos`, na.rm = T))
+
+ggplot(ff, aes(treatment, frutos_flores, fill = plot)) +
+  geom_col(position = "dodge", aes(color = plot), width = 0.5) +
+  geom_text(aes(label = frutos_flores, y = frutos_flores + 0.1), 
+            position = position_dodge(width = 0.5), 
+            vjust = -0.1) +
+  labs(y = "Frecuencia de frutos o flores") +
+  theme(axis.title.x = element_blank(), 
+        panel.grid = element_blank())
+
+```
+
+Durante el periodo del experimento se contabilizó la aparición de flores y/o frutos de la vegetación monitoreada, como se observa en la @fig-frutosflores . En las parcelas control se registró la presencia de flores y/o frutos, mientras que las parcelas de sequía no presentaron ninguna observación durante el tiempo del experimento. La mayoría de estas observaciones fueron realizadas un año después del inicio del experimento. Además, los datos indican que en el año 2023 la parcela control C se registró la mayor parte de presencia de flores y/o frutos, pero en el año 2024 fueron las parcelas control A y C.
+
+```{r}
+#| label: fig-plantasoriginales
+#| fig-width: 7
+#| fig-height: 3.5
+#| fig-cap: "Porcetaje de plantas que sobrevivieron desde el inicio del experimento, durante el período del experimento"
+#| out-width: 14cm
+#| out-height: 8cm
+#| fig-dpi: 300
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+
+vs <- data.frame(
+  fechas = as.Date(c("2022-07-26", "2022-09-15", "2022-10-20",
+                     "2022-12-10","2023-01-01","2023-04-06",
+                     "2023-05-10","2023-06-08","2023-07-15",
+                     "2023-09-12","2024-04-05","2024-11-11",
+                     "2024-12-05"), format = "%Y-%m-%d"),
+  Drought_A = c(28, 27, 27, 27, 27, 25, 23, 21, 20, 19, 18, 15, 15)/28,
+  Drought_B = c(26, 21, 13, 13, 8, 7, 6, 4, 4, 4, 3, 3, 3)/26,
+  Drought_C = c(63, 57, 54, 46, 45, 38, 37, 37, 36, 35, 27, 22, 22)/63,
+  Control_A = c(NA, 29, 29, NA, 24, NA, 19, 18, NA, 18, 18, 17, 16)/29,
+  Control_B = c(NA, 40, 36, NA, NA, 31, 27, NA, NA, 23, NA, 16, 15)/40,
+  Control_C = c(NA, 10, 9, NA, 9, 9, NA, NA, NA, NA, NA, 3, 3)/10) %>% 
+  pivot_longer(cols = -fechas, 
+               names_to = c("tratamiento", "parcela"),
+               names_pattern = "(.*)_(.)",
+               values_to = "cantidad") %>% 
+  na.omit() %>% 
+  arrange(tratamiento)
+
+valores <- tibble(x = c(0.95, 0.95),
+       tratamiento = c("Drought", "Control"), 
+       tbl = list(tibble(Parcela = c("A", "B", "C"),
+                         Inicio = c(28, 26, 63), 
+                         Final = c(15, 3, 22)), 
+                  tibble(Parcela = c("A", "B", "C"),
+                         Inicio = c(29, 40, 10), 
+                         Final = c(16, 15, 3)))) 
+  
+z1 <- valores %>% 
+  unnest(tbl) %>% 
+  select(-x) %>% 
+  mutate(Supervivencia = Final/Inicio) %>%
+  group_by(tratamiento) %>%
+  summarise(Inicio = sum(Inicio),
+            Final = sum(Final)) %>%
+  column_to_rownames("tratamiento") %>%
+  as.matrix()
+  
+test_chi <- chisq.test(z1)
+
+
+ggplot(vs, aes(fechas, cantidad)) +
+  geom_line(aes(color = parcela)) +
+  geom_table_npc(data = valores, aes(npcx = x, npcy = x, label = tbl), size = 2.7)+
+  facet_wrap(~tratamiento,
+             labeller = labeller(
+               tratamiento = c("Control" = "Control", "Drought"= "Sequía"))) +
+  scale_y_continuous(labels = label_percent()) +
+  labs(x = "Fecha", 
+       y = "Supervivencia") +
+  theme(panel.grid = element_blank())
+```
+
+A partir de la prueba de *Chi - cuadrado,* se encontró que no hubo efecto del experimento sobre la supervivencia de la vegetación (*X^2^* = 0.48948, p - valor= 0.4842). El porcentaje de plantas del primer monitoreo que sobrevivieron en las parcelas de sequía A, B y C fue de 53%, 11% y 35%, respectivamente. Mientras que en las parcelas control A, B y C el porcentaje de plantas que sobrevivieron fue de 55%, 37% y 30%, respectivamente. En la @fig-plantasoriginales se observa un rápido descenso en la cantidad de plantas del primer monitoreo durante el año 2022 en las parcelas de sequía B y C. Las plantas dominantes que sobrevivieron al final del periodo de monitoreo en las parcelas de sequía A, B y C, fueron *Pariana campestris, Pouruma minor* y *Piper* *sp*., respectivamente. Así mismo, la planta con más individuos al final del monitoreo tanto en las parcelas A, B y C de los controles fue *Peperomia sp.*
+
+```{r}
+#| label: fig-tasacrecimiento
+#| fig-width: 7
+#| fig-height: 3.5
+#| fig-cap: "Función de densidad de las tasas de crecimiento en las parcelas control y tratamiento. Las marcas en el borde inferior representan los valores medianos para cada parcela."
+#| out-width: 14cm
+#| out-height: 8cm
+#| fig-dpi: 300
+
+load("../AnalisisPlantas/output/tablas/data_clean.rda")
+load("../AnalisisPlantas/output/tablas/modelolineal_altura.rda")
+load("../AnalisisPlantas/output/tablas/modelolineal_hojas.rda")
+
+mdl_tidy_altura_e <- mdl_tidy_altura %>% 
+  rename(Tratamiento = treatment)
+
+tmp <- mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  group_by(Tratamiento) %>% 
+  mutate(id = 1:n()) %>% 
+  pivot_wider(id_cols = id, 
+              names_from = Tratamiento, 
+              values_from = Slope) 
+
+#ks.test(tmp$Control,tmp$Drought)
+
+med <- mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  group_by(Tratamiento) %>% 
+  summarise(Slope = median(Slope))
+
+mdl_tidy_altura_e %>% 
+  ungroup() %>% 
+  filter(term == 'fecha', p.value < 0.05) %>% 
+  select(Tratamiento, Slope) %>%
+  ggplot() +
+  aes(Slope, color = Tratamiento) +
+  geom_density() +
+  geom_rug(data = med) +
+  annotate(geom = "label",
+           label = 'KS test\nD = 0.48835\np-value = 0.002324',
+            x = 0.4,
+            y = 18,
+            label.padding = unit(0.65, "lines"),
+            alpha = 0.45,
+            size = 3,
+            color = "black") +
+  labs(y = "Densidad", x = "Tasa de crecimiento [cm/día]") +
+  theme(panel.grid = element_blank())
+
+```
+
+La tasa de crecimiento de la vegetación en las parcelas control y tratamiento mostró una diferencia significativa entre ellas, mediante la prueba estadística Kolmogorov-Smirnov (D = 0.48835 y p-value = 0.002324). La tasa de crecimiento en las parcelas control a lo largo del tiempo tiene un comportamiento más estable y constante que las parcelas de sequía como se observa en la @fig-tasacrecimiento.
+
+```{r}
+#| label: fig-cambioenaltura_acu
+#| fig-width: 8
+#| fig-height: 3.5
+#| fig-cap: "a) Relación entre la altura de la vegetación, b) Relación entre el número de hojas y la precipitación acumulada entre monitoreos desde el primer hasta el último monitoreo"
+#| out-width: 15cm
+#| out-height: 6.6cm
+#| fig-dpi: 300
+
+load("../AnalisisPlantas/output/tablas/cambioen_alturayhojas_precipitacion.rda")
+
+a1 <- cond_antecedentes_pcp %>% 
+  ggplot(aes(x = acu, y = alt_chg, color = factor(plot))) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = "y ~ x", se = F) +
+  facet_wrap(~treatment, 
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía")),
+             scales = "free") +
+  labs(x = "Precipitación acumulada [mm]", 
+       y = "Altura del tallo [cm]") +
+  theme(legend.position = "none")
+  
+
+a2 <- cond_antecedentes_pcp %>% 
+  ggplot(aes(x = acu, y = hoj_chg, color = factor(plot))) + 
+  geom_point() + 
+  geom_smooth(method = "lm", formula = "y ~ x", se = F) + 
+  facet_wrap(~treatment, 
+             labeller = labeller(
+               treatment = c("Control" = "Control", "Drought"= "Sequía")),
+             scales = "free") +
+  labs(x = "Precipitación acumulada [mm]", 
+       y = "Número de hojas", 
+       color = "Parcela") +
+  theme(legend.position = "bottom")
+
+lay <- "
+AB
+AB
+AB
+AB
+AB
+AB
+AB
+CC
+"
+a1 +a2 +guide_area() + 
+  plot_layout(guides = "collect", design = lay) +
+  plot_annotation(tag_levels = "a", tag_suffix = ")")
+  
+
+```
+
+El número de hojas en relación al aumento en la acumulación de agua en ambos sitios, indica que existe una relación positiva entre ellos [@fig-cambioenaltura_acu]. La producción de hojas fue mayor en las parcelas control ya que tuvo un promedio de 16 ± 23.1, mientras que en las parcelas sequía el promedio fue de 6.7 ± 8.2 [@tbl-estadisticasdescriptivas].
+
+## Luminosidad
+
+El experimento con los sensores de luz muestra una alta correlación entre los registros diarios de luminosidad de los controles comparados con los de sequía (@fig-luminosidadparcela a). Sin embargo, el modelo lineal de esta correlación muestra que la parcela C es la que tiene mayores diferencias en el rango (pendiente del modelo). Tanto para la parcelas control A (pendiente = 1.2) y B (pendiente = 0.97) la escala no difiere sustancialmente, lo cual indica que los rangos de luminosidad están relativamente cercanos entre control y tratamiento.
+
+Al respecto de la reducción de luminosidad por el techo instalado ( @fig-luminosidadparcela b ), se encontró que la luminosidad debajo del techo se redujo aproximadamente un tercio de la luminosidad que llega por encima del techo de las parcelas. La intensidad de luz no es homogénea en las tres parcelas. Se observó que, la parcela de sequía B tuvo mayor luminosidad por encima del techo (2826.4 ± 1153.4) y bajo el techo (1542.3 ± 575.3), mientras que la parcela C tuvo menores condiciones de luminosidad por encima (2524.0 ± 807.2) y bajo del techo (1110.3 ± 352.3).
+
+Al comparar la disponibilidad de luz con la vegetación, se encontró que: los mayores niveles de luminosidad se dieron en las parcelas de sequía B pero el porcentaje de supervivencia de la vegetación inicial fue del 11%, el crecimiento promedio al final del experimento fue de 39.6 ± 17.6 cm. En cambio, la parcela de sequía C tuvo los menores niveles de luminosidad, el porcentaje de supervivencia de plantas del primer monitoreo fue del 35% y un crecimiento promedio del tallo de 44.2 ± 42.0 cm. La parcela de sequía A tuvo un nivel medio de luminosidad, el porcentaje de supervivencia de plantas del primer monitoreo fue del 53% y un crecimiento promedio del tallo de 33.6 ± 17.6 cm. Para las parcelas control el mayor nivel de luminosidad tuvo lugar en la parcela C, el porcentaje de supervivencia de plantas del primer monitoreo fue del 8% y un crecimiento promedio del tallo 112.6 ± 80.1 cm. La parcela control A tuvo los menores niveles de luminosidad pero el porcentaje de supervivencia del 47% y un crecimiento promedio del tallo fue de 109.0 ± 87.1 cm. Mientras que en la parcela control B los niveles de luminosidad fueron mayor a los de la parcela A , el porcentaje de supervivencia fue del 44% y el crecimiento promedio del tallo fue de 69.2 ± 66.2 cm.
+
+```{r}
+#| label: fig-luminosidadparcela
+#| fig-width: 10
+#| fig-height: 7
+#| fig-cap: "Experimento para medir los niveles de luminosidad (Lx) a) comparación de la luminosidad a 150 cm por encima del suelo en las parcelas de sequía y control, b) dentro de las parcelas de sequía a 150 cm del suelo y 15 cm por encima del techo"
+#| out-width: 15cm
+#| out-height: 10.5cm
+#| fig-dpi: 300
+
+load("../luz/output/tablas/luz_promedio_diario.rda")
+load("../luz/output/tablas/data_full_luz.rda")
+
+p1 <- avg_luz %>% 
+  mutate(avg_d_t =  avg_d_t/1000, 
+         avg_d_s =  avg_d_s/1000) %>% 
+  ggscatter(x = "avg_d_t", y = "avg_d_s", 
+            facet.by = "plot",
+            add = "reg.line",
+            color = "plot") + 
+  stat_cor(label.x.npc = "right",
+           label.y.npc = "bottom",
+           hjust = 1,
+           vjust = -1) +
+  stat_regline_equation(label.x.npc = "right",
+                        label.y.npc = "bottom",
+                        hjust = 1,
+                        vjust = 0) +
+  xlab("Sobre el techo [kLux]") +
+  ylab("Bajo el techo  [kLux]") +
+  theme(panel.grid = element_blank())
+
+avg_luz_suelos <- b %>%
+  pivot_wider(id_cols = c(sitio, plot, fecha),
+              names_from = tratamiento,
+              values_from = luz) %>% 
+  na.omit() %>%
+  group_by(sitio, plot, 
+           fecha = floor_date(fecha, "hour")) %>% 
+  summarise(avghluzC = mean(C),
+            avghluzD = mean(D),
+            .groups = "drop") %>% 
+  group_by(sitio, plot,
+           fecha = floor_date(fecha, "day")) %>% 
+  summarise(avg_d_C = mean(avghluzC)/1000,
+            avg_d_D = mean(avghluzD)/1000,
+            .groups = "drop")
+
+p2 <- avg_luz_suelos %>% 
+  ggscatter(x = "avg_d_D", y = "avg_d_C", 
+            facet.by = "plot",
+            add = "reg.line",
+            color = "plot") + 
+  stat_cor(label.x.npc = "right",
+           label.y.npc = "bottom",
+           hjust = 1,
+           vjust = 0) +
+  stat_regline_equation(label.x.npc = "right",
+                        label.y.npc = "bottom",
+                        hjust = 1,
+                        vjust = 1) +
+  labs(x = "Tratamiento [kLux]", y = "Control [kLux]")
+
+
+p2 + p1 + guide_area() + 
+   plot_annotation(tag_levels = "a", tag_suffix = ")") +
+   plot_layout(guides = "collect", ncol = 1,
+               heights = c(5, 5, 1))
+
+```
+
+# Discusión
+
+El trabajo de investigación pretende responder cómo la reducción de la precipitación incide en la humedad del suelo y cuál es la respuesta de la vegetación frente a este escenario. Los resultados indican que en las parcelas de sequía la humedad del suelo a los 15 cm fue en general menor que a los 60 cm de profundidad. La disminución de agua disponible para la vegetación a los 15 cm de profundidad tuvo repercusiones en el crecimiento longitudinal del tallo, producción de hojas y presencia de flores y/o frutos. Es importante considerar que en el sitio del experimento la mayor parte de las raíces se encontraron a los 15 cm de profundidad. También se observó que varias plantas murieron durante el experimento disminuyendo la población original principalmente en las parcelas de sequía.
+
+Las características de los eventos de precipitación entre la estación y el bosque no fueron significativamente diferentes entre sí (@tbl-caracteristasprecipitacion). Las mínimas variaciones entre ambos registros podrían estar relacionados con la intercepción de la precipitación por el dosel del bosque [@brasil2022]. La intercepción de la precipitación por el dosel modifica la intensidad, tiempo y la forma en la que el agua llega al suelo [@brasil2022; @oliveira2024; @alivio2023]. El número de respuestas de las señales de humedad del suelo a 15 cm de profundidad fue menor que las respuestas a 60 cm de profundidad. En ambas profundidades se registraron reacciones a los eventos de mayor intensidad de precipitación (Categoría 4). Mientras que los eventos de menor intensidad (Categoría 2) generaron más respuestas a los 60 cm de profundidad. Se hallaron diferencias significativas entre repeticiones y entre profundidades tanto en los controles como en las de sequía, pero estas últimas mostraron diferencias más marcadas ( @fig-boxplotsm ). Tal como se esperaba las parcelas control mostraron en general mayor contenido de humedad del suelo. Esto podría ser porque la capa de suelo a los 15 cm en las parcelas de sequía está expuesta a factores como la evaporación y extracción de agua por las raíces de las plantas, entre otros. [@kühnhammer2023]. @tng2022, en su estudio observó los cambios de humedad de suelos coluviales metamórficos y graníticos a los 10, 50, 100, y 150 cm de profundidad y sus resultados en las dos primeras profundidades mostraron similitudes con los resultados de este estudio. A pesar de que los eventos de menor intensidad no generan respuestas de infiltración inmediatas, es posible que tengan un efecto en la reacción de la humedad del suelo con un mayor tiempo de retraso. Lo cual afectaría las condiciones iniciales en los que se produce la infiltración y daría paso a la generación de flujos laterales y/o preferenciales [@jiang2023]. Los flujos preferenciales a través de canales del suelo, macroporos o suelos saturados, son una característica de los bosques tropicales [@rodrigues2024]. Estos flujos pueden explicar el mayor número de respuestas en los sensores de humedad a los 60 cm de profundidad.
+
+La especie vegetal dominante de todas las parcelas de sequía al final del monitoreo fue *Pariana campestris*, es una planta herbácea que pudo beneficiarse de las condiciones de sombra que el techo en la parcelas de sequía brindaba, ya que, esta herbácea habita en el sotobosque de la selva [@londoño2024]
+
+El crecimiento longitudinal del tallo en las plantas del primer monitoreo de las parcelas de sequía fue, en promedio, menor que en las parcelas control. Además, la tasa de crecimiento en las parcelas de sequía fue significativamente menor (p-value \< 0.5) que en las parcelas control. Mantener el crecimiento longitudinal del tallo disminuye el área foliar fotosintética, lo cuál puede ser beneficioso para las plantas, ya que el agua es un factor más limitante para el crecimiento que el aporte de carbono originado en la fotosíntesis [@gavinet2019]. En un experimento similar en un bosque tropical de Australia, en condiciones climáticas similares al área de este estudio, se encontró incrementos en el crecimiento del tallo (diámetro y altura) y masa aérea de las parcelas control. Al contrario, en las parcelas de sequía la tasa de crecimiento se redujo o se estabilizó [@tng2022]. En los primeros 3 meses de este experimento algunas plantas de las parcelas control crecieron rápidamente y aumentaron su cantidad de hojas de manera evidente. En cambio, las plantas en las parcelas de sequía durante los primeros meses también incrementaron su altura y número de hojas, tal como en el estudio de @tng2022. La respuesta de la vegetación de las parcelas sequía se estabilizó aproximadamente al cuarto mes después de haber iniciado el experimento. Mientras la longitud del tallo aumentaba en las parcelas de sequía fue evidente la reducción en la cantidad de hojas y en la producción de nuevas hojas. Las variaciones estacionales de la humedad del suelo y precipitación influyen de gran manera en la producción de hojarasca [@valentini2008]. Aunque las parcelas control no estaban sometidas a la reducción de precipitación, si estaban condicionadas por la competencia y perturbaciones provocadas por el dosel (ramas y árboles cayeron sobre dos de las parcelas control durante el experimento). Por ejemplo, la @fig-cambioenaltura_acu, indica una relación negativa entre la tasa de crecimiento y la acumulación de lluvia en las parcelas control A y C, lo cual coincide con dos acontecimientos durante octubre de 2022 e inicios de 2023, en los cuáles varios árboles cayeron cerca del lugar de estudio. Aún así, el promedio de la longitud del tallo, producción de hojas y producción de flores y/o frutos fue mayor que en las parcelas de sequía @tbl-estadisticasdescriptivas, las cuales por influencia el techo no estaban expuestas a las mismas perturbaciones. Si consideramos la hipótesis de este proyecto, se esperaba que la producción de hojas en las parcelas control fuera significativamente mayor a lo encontrado en los resultados. Según los resultados de @gavinet2019 en Francia, el mayor efecto de la exclusión de precipitación se observó en la producción foliar, la cuál disminuyo poco después de la instalación del experimento. Aunque los bosques en la amazonía logren adaptarse a eventos como las sequías, el aumento en la duración de estos eventos podría desencadenar una transición hacia un dosel abierto, lo que reduciría el reciclaje de humedad atmosférica en estos bosques[@wunderling2022].
+
+La variable más afectada del experimento fue la producción de flores y/o frutos debido a que en las parcelas de sequía no se encontraron ninguno de estos productos. La vegetación al inicio del experimento en ambos tratamientos se compuso de plantas jóvenes que no alcanzaban los 100 cm de altura. Los primeros registros de producción de flores y/o frutos en las parcelas control se presentaron 10 meses después de haber iniciado el experimento. De forma similar, otros estudios de exclusión de precipitación, también muestran reducciones en la producción de flores y/o frutos durante el primer año del experimento \[ @meir2015, @vogado2023\]. El estrés hídrico inhibe la fotosíntesis y con ello influye en el proceso de producción y desarrollo de hojas, y altera los patrones de caída de frutos [@brando2006]. Además, mediante una comparación con registros de radiación solar se determinó que la producción de flores coincide con los picos de irradiancia [@brando2006]. En este estudio no se midieron niveles de radiación solar como para aproximar los hallazgos de @brando2006, pero en su lugar se midió la luminosidad para descartar el efecto de la reducción de luz (- 30%) generada por el techo. La reducción de luminosidad generada por el techo podría equipararse con la variabilidad de luminosidad provocada por la heterogeneidad espacial del dosel superior sobre el sotobosque. A partir de lo cual, no es posible generalizar la hipótesis de que el techo tiene influencia sobre las respuestas vegetales en el experimento.
+
+En general, si este bosque piemontano de la amazonía experimenta un descenso en la media normal de la precipitación, provocaría una limitada disponibilidad de agua en el suelo que afectaría el desarrollo de la vegetación del sotobosque. Por ejemplo, el crecimiento longitudinal del tallo de las plantas reduciría su tasa de crecimiento, la vegetación dejaría de producir hojas, la producción de flores y/o frutos se vería afectada impidiendo la aparición de nuevas plantas y algunas especies que se beneficiarían por el cambio de condiciones y dominarían el paisaje. La humedad del suelo es un controlador clave para la hidrología local y el intercambio de energía, comprender mejor estos procesos pueden mejorar los modelos de predicciones climáticos y la hidrología futura de la Amazonía [@bruno2006].
+
+# Conclusión
+
+Este trabajo buscaba estudiar la respuesta de la humedad del suelo y su efecto en la vegetación provocados por la reducción de la precipitación. Según la hipótesis establecida se esperaba que la humedad del suelo disminuyera por la reducción de precipitación y esto se evidencie en las respuestas de la vegetación. Las mediciones del crecimiento longitudinal del tallo, cantidad de hojas, presencia de flores y/o frutos y supervivencia de las plantas, realizadas durante dos años en el bosque siempreverde piemontano del norte - centro de la cordillera oriental de los Andes, indican que la vegetación del sotobosque es sensible a los cambios de humedad en la capa más superficial del suelo (15 cm de profundidad), ya que es la zona de enraizamiento. Esta limitación provocó respuestas que variaban según el individuo vegetal. La vegetación susceptible a cambios en los niveles de humedad del suelo desaparecieron del sitio experimental, dando paso a otro tipo de vegetación, adaptada a las nuevas condiciones de humedad. Por la gran diversidad de especies en la amazonía ecuatoriana las respuestas de la vegetación a la reducción de precipitación pueden variar entre sí.
+
+En conclusión, la reducción de entradas de agua por precipitación limita la cantidad de agua disponible para la plantas, lo cual se ve reflejado en el crecimiento longitudinal de la vegetación, producción de nuevas hojas y la producción de flores y/o frutos. Este estudio tiene limitaciones logísticas y de escala, que no permiten asegurar que este comportamiento sea generalizado en el bosque siempreverde piemontano del norte - centro de la cordillera oriental de los Andes. Sin embargo, es un punto de partida para otras interregotantes sobre la ecohidrología de estos bosques. Por lo tanto, para conocer detalladamente que pasaría en este bosque si la precipitación disminuye es necesario complementar con estudios sobre la fenología de las especies vegetales. También, son necesarios estudios relacionados a la dinámica de la humedad del suelo para comprender los procesos hidrológicos particulares que se llevan a cabo en esta zona de estudio, tales como cambios estructurales de la humedad del suelo, flujos preferenciales, mecanismos de retroalimentación entre suelo y plantas. Estudios más detallados pueden vislumbrar efectos en la ecohidrología y mecanismos de retroalimentación de la amazonía ecuatoriana y el clima futuro.
+
+# Agradecimientos
+
+A la Universidad Regional Amazónica Ikiam por su compromiso con la educación sostenible y la generación de nuevo conocimiento. En especial al proyecto AWESOME desarrollado en conjunto con la Universidad de New Hampshire, representada por Heidi Asborjensen, quiénes financiaron este trabajo.
+
+# Referencias
